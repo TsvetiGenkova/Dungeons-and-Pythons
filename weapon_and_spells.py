@@ -36,3 +36,5 @@ class Spell():
     def get_cast_range(self):
         return self.cast_range
 
+
+        
