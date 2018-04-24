@@ -127,8 +127,9 @@ class Dungeon():
         if self.dungeon_map[x][y] == "T":
             return f"Found {self.pick_treasure()}!"
         elif self.dungeon_map[x][y] == "E":
+            dun = self.dungeon_map
             enemy = Enemy(health=100, mana=100, damage=20)
-            f = Fight(self.hero, enemy)
+            f = Fight(self.hero, enemy, dun)
             start_fight()
         elif self.dungeon_map[x][y] == ".":
             pass
@@ -138,14 +139,13 @@ class Dungeon():
             print("You have cleared the dungeon!")
 
     def check_for_enemy(self, ran):
-        for i in range(1, ran):
+        for i in range(0, ran):
                 if (self.dungeon_map[self.x + i][self.y] == "E" or
                         self.dungeon_map[self.x - i][self.y] == "E" or
                         self.dungeon_map[self.x][self.y + i] == "E" or
                         self.dungeon_map[self.x][self.y - i] == "E"):
                     return True
-                else:
-                    return False
+        return False
 
     def hero_attack(self, by):
         if by == "spell":

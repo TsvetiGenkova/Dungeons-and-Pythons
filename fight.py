@@ -1,18 +1,27 @@
 from hero import Hero
 from enemy import Enemy
-from dungeon import Dungeon
 
 class Fight(Hero, Enemy):
-    def __init__(self, hero, enemy):
+    def __init__(self, hero, enemy, dun):
         assert isinstance(hero, Hero), 'Hero must be instance of Hero class.'
         assert isinstance(enemy, Enemy), 'Enemy must be instance of Enemy class.'
         self.hero = hero
         self.enemy = enemy
-        #I am not sure how to get the instanse of the class
-        self.dungeon = ...
+        self.dungeon = dun
 
     def check_enemy(self, ran):
-        self.dungeon.check_for_enemy(ran)
+        for x, y in enumerate(self.dungeon):
+            for y_value in value:
+                if y_value == 'H':
+                    a = index
+                    b = y_value
+        for i in range(0, ran):
+                if (self.dungeon[a + i][b] == "E" or
+                        self.dungeon_map[a - i][b] == "E" or
+                        self.dungeon_map[a][b + i] == "E" or
+                        self.dungeon_map[a][b - i] == "E"):
+                    return True
+        return False
 
     def hero_move(self):
         if self.hero.spell != None and self.hero.weapon != None:
