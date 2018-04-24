@@ -57,24 +57,28 @@ class Dungeon():
             'Direction must be up,down, left or right'
 
         if direction == 'up' and self.is_safe(self.x - 1, self.y):
+            self.where_are_you(self.x - 1, self.y)
             self.dungeon_map[self.x][self.y] = '.'
             self.dungeon_map[self.x - 1][self.y] = 'H'
             self.x -= 1
             return True
 
         elif direction == 'down' and self.is_safe(self.x + 1, self.y):
+            self.where_are_you(self.x + 1, self.y)
             self.dungeon_map[self.x][self.y] = '.'
             self.dungeon_map[self.x + 1][self.y] = 'H'
             self.x += 1
             return True
 
         elif direction == 'left' and self.is_safe(self.x, self.y - 1):
+            self.where_are_you(self.x, self.y - 1)
             self.dungeon_map[self.x][self.y] = '.'
             self.dungeon_map[self.x][self.y - 1] = 'H'
             self.y -= 1
             return True
 
         elif direction == 'right' and self.is_safe(self.x, self.y + 1):
+            self.where_are_you(self.x, self.y + 1)
             self.dungeon_map[self.x][self.y] = '.'
             self.dungeon_map[self.x][self.y + 1] = 'H'
             self.y += 1
@@ -119,18 +123,18 @@ class Dungeon():
         return tr
 
 
-    def where_are_you(self):
-        if self.dungeon_map[self.x][self.y] == "T":
+    def where_are_you(self, x, y):
+        if self.dungeon_map[x][y] == "T":
             return f"Found {self.pick_treasure()}!"
-        elif self.dungeon_map[self.x][self.y] == "E":
+        elif self.dungeon_map[x][y] == "E":
             enemy = Enemy(health=100, mana=100, damage=20)
             f = Fight(self.hero, enemy)
             start_fight()
-        elif self.dungeon_map[self.x][self.y] == ".":
+        elif self.dungeon_map[x][y] == ".":
             pass
-        elif self.dungeon_map[self.x][self.y] == "S":
+        elif self.dungeon_map[x][y] == "S":
             pass
-        elif self.dungeon_map[self.x][self.y] == "G":
+        elif self.dungeon_map[x][y] == "G":
             print("You have cleared the dungeon!")
 
     def check_for_enemy(self, ran):
