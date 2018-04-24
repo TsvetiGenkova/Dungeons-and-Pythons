@@ -90,6 +90,7 @@ class Dungion():
         except IndexError:
             return False
 
+<<<<<<< HEAD
 
 # d = Dungion('map.txt')
 
@@ -104,3 +105,87 @@ class Dungion():
 #                  mana=100, mana_regeneration_rate=2))
 # print(a)
 # d.print_map()
+=======
+    def pick_treasure(self):
+        t = []
+        with open("loot.txt", 'r') as f:
+            for i in f.readlines():
+                t.append(i)
+        tresure = t[randint(0,len(t))].split(",")
+
+        if tresure[0] == "weapon":
+            tmp = float(tresure[2]) if '.' in tresure[2] else int(tresure[2])
+            tr = Weapon(name=tresure[1], damage=tmp)
+            self.hero.equip(tr)
+        elif tresure[0] == "spell":
+            tmp = float(tresure[2]) if '.' in tresure[2] else int(tresure[2])
+            tmp1 = float(tresure[3]) if '.' in tresure[3] else int(tresure[3])
+            tr = Spell(name=tresure[1], damage=tmp, mana_cost=tmp1, cast_range=int(tresure[4]))
+            self.hero.learn(tr)
+        else:
+            if tresure[0] == "Mana potion":
+                self.hero.take_mana(int(tresure[1]))
+                tr = "Mana potion"
+            elif tresure[0] == "Health potion":
+                self.hero.take_healing(int(tresure[1]))
+                tr = "Health potion"
+
+        return tr
+
+
+    def where_are_you(self):
+        if self.dungeon_map[self.x][self.y] == "T":
+            return f"Found {self.pick_treasure()}!"
+        elif self.dungeon_map[self.x][self.y] == "E":
+            pass
+            #start_fight(self.hero, enemy)
+        elif self.dungeon_map[self.x][self.y] == ".":
+            pass
+        elif self.dungeon_map[self.x][self.y] == "S":
+            pass
+        elif self.dungeon_map[self.x][self.y] == "G":
+            print("You have cleared the dungeon!")
+
+    def check_for_enemy(self, ran):
+        for i in range(1, ran):
+                if self.dungeon_map[self.x + i][self.y] == "E":
+                    print("There is enemy in range, you can start a fight!")
+                elif self.dungeon_map[self.x + i][self.y + i] == "E":
+                    print("There is enemy in range, you can start a fight!")
+                elif self.dungeon_map[self.x + i][self.y - i] == "E":
+                    print("There is enemy in range, you can start a fight!")
+                elif self.dungeon_map[self.x - i][self.y - i] == "E":
+                    print("There is enemy in range, you can start a fight!")
+                elif self.dungeon_map[self.x - i][self.y + i] == "E":
+                    print("There is enemy in range, you can start a fight!")
+                elif self.dungeon_map[self.x - i][self.y] == "E":
+                    print("There is enemy in range, you can start a fight!")
+                elif self.dungeon_map[self.x][self.y + i] == "E":
+                    print("There is enemy in range, you can start a fight!")
+                elif self.dungeon_map[self.x][self.y - i] == "E":
+                    print("There is enemy in range, you can start a fight!") 
+                else:
+                    print("There is no enemy in range!")
+                    return False
+                return True
+
+
+    def hero_attack(self, by):
+        if by == "spell":
+            ran = self.hero.spell.cast_range
+            if self.check_for_enemy(ran):
+                pass
+                #start_fight(self.hero, enemy)
+        if by == "weapon":
+            if self.check_for_enemy(1):
+                pass
+                #start_fight(self.hero, enemy)
+
+
+d = Dungion('map.txt')
+a = d.spawn(Hero(name='ivan', title='Light', health=100,
+                  mana=100, mana_regeneration_rate=2))
+d.print_map()
+
+d.move_hero('right')
+>>>>>>> e7b9aa0cbcf7bbaa838eabec5dee8577b6040eb5

@@ -1,0 +1,18 @@
+weapon, Blackfyre, 20
+weapon, Dark Sister, 30
+weapon, Heartsbane, 44.5
+weapon, Ice, 22.8
+weapon, Longclaw, 32
+spell, Starfire Nova, 42, 80, 1
+spell, Surge of Demons, 24, 8, 1
+spell, Magma Rocket, 33, 20, 1
+spell, Hex of Shadows, 50, 15, 2
+spell, Arcane Burst, 22, 18, 3
+Mana potion, 20
+Mana potion, 30
+Mana potion, 40
+Health potion, 10
+Health potion, 20
+Health potion, 25
+
+
