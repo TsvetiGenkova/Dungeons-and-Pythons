@@ -11,22 +11,29 @@ class Dungion():
         assert os.path.isfile(map_file) is True, 'map_file is not file'
         self.map_file = map_file
         self.dungeon_map = self.load_map()
+        self.spawning_cordinates = self.get_all_spawning_cordinates()
         self.hero = None
         self.x = None
         self.y = None
 
     def spawn(self, hero):
         assert isinstance(hero, Hero), 'Hero must be instance of Hero class '
-        for index, value in enumerate(self.dungeon_map):
-            for j in value:
-                if j == 'S':
-                    i = value.index(j)
-                    value[index] = 'H'
-                    self.x = index
-                    self.y = i
-                    self.hero = hero
-                    return True
+        for i in self.spawning_cordinates:
+            if i[1] == False:
+                self.x = i[0][0]
+                self.y = i[0][1]
+                self.dungeon_map[self.x][self.y] = 'H'
+                i[1] = True
+                return True
         return False
+
+    def get_all_spawning_cordinates(self):
+        spawning_cordinates = []
+        for index, value in enumerate(self.dungeon_map):
+            for y_index, y_value in enumerate(value):
+                if y_value == 'S':
+                    spawning_cordinates.append([(index, y_index), False])
+        return spawning_cordinates
 
     def load_map(self):
         m = []
@@ -38,7 +45,7 @@ class Dungion():
 
     def print_map(self):
         for i in self.dungeon_map:
-            print(i)
+            print(''.join(i))
 
     def move_hero(self, direction):
         assert type(direction) is str, 'Direction must be string'
@@ -88,11 +95,12 @@ class Dungion():
 
 # a = d.spawn(Hero(name='ivan', title='Light', health=100,
 #                  mana=100, mana_regeneration_rate=2))
-# d.print_map()
+# print(a)
 
-
-# d.move_hero('right')
-# d.move_hero('right')
-# d.move_hero('right')
-
+# a = d.spawn(Hero(name='ivan', title='Light', health=100,
+#                  mana=100, mana_regeneration_rate=2))
+# print(a)
+# a = d.spawn(Hero(name='ivan', title='Light', health=100,
+#                  mana=100, mana_regeneration_rate=2))
+# print(a)
 # d.print_map()
