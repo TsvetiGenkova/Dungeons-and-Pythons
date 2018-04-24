@@ -123,16 +123,16 @@ class Dungion():
         return tr
 
     def where_are_you(self):
-        if self.dungeon_map[self.x][self.y] == "T":
+        if self.field_type == "T":
             return f"Found {self.pick_treasure()}!"
-        elif self.dungeon_map[self.x][self.y] == "E":
+        elif self.field_type == "E":
             pass
             #start_fight(self.hero, enemy)
-        elif self.dungeon_map[self.x][self.y] == ".":
+        elif self.field_type == ".":
             pass
-        elif self.dungeon_map[self.x][self.y] == "S":
+        elif self.field_type == "S":
             pass
-        elif self.dungeon_map[self.x][self.y] == "G":
+        elif self.field_type == "G":
             print("You have cleared the dungeon!")
 
     def check_for_enemy(self, ran):
