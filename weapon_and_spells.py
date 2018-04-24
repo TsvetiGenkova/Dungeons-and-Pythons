@@ -3,12 +3,16 @@ class Weapon():
         self.name = name
         self.damage = damage
 
-    def get_damage(self):
-        return self.damage
+        if type(damage) is int or type(damage) is float:
+            pass
+        else:
+            raise TypeError("The damage should be a number!")
 
     def get_name(self):
         return self.name
 
+    def get_damage(self):
+        return self.damage
 
 
 
@@ -18,11 +22,20 @@ class Spell():
         self. damage = damage
         self.mana_cost = mana_cost
         self.cast_range = cast_range
+    
+        if type(cast_range) is not int:
+            raise TypeError("The cast range should be int!")
 
-    def __eq__(self, other):
-        if self.name == other.name and self.damage == other.damage and self.mana_cost == other.mana_cost and self.cast_range == other.cast_range:
-            return True
-        return False
+        if type(damage) is int or type(damage) is float:
+            pass
+        else:
+            raise TypeError("The damage should be a number!")
+
+
+        if type(mana_cost) is int or type(mana_cost) is float:
+            pass
+        else:
+            raise TypeError("The mana cost should be a number!")
 
     def get_name(self):
         return self.name
@@ -35,6 +48,3 @@ class Spell():
 
     def get_cast_range(self):
         return self.cast_range
-
-
-        

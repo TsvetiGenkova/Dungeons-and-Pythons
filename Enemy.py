@@ -39,8 +39,8 @@ class Enemy(Person):
             return self.weapon.get_damage()
 
     def take_mana(self, mana):
-        assert type(mana) is int,'mana must be integer'
-        assert mana > 0,'mana must be positive'
+        assert type(mana) is int, 'mana must be integer'
+        assert mana > 0, 'mana must be positive'
         if (self.mana + mana) <= self.max_mana:
             self.mana += mana
             return True
@@ -60,7 +60,7 @@ class Enemy(Person):
     def equip(self, weapon):
         assert isinstance(
             weapon, Weapon) is True, 'Weapon is not instance of weapon'
-        if self.weapon is  None:
+        if self.weapon is None:
             self.weapon = weapon
 
         if self.weapon.get_damage() < weapon.get_damage():

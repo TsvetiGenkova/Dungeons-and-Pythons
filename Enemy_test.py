@@ -45,8 +45,6 @@ class Test(unittest.TestCase):
         self.enemy.mana = 15
         self.assertTrue(self.enemy.take_mana(10))
 
-    
-
 
 if __name__ == '__main__':
     unittest.main()
