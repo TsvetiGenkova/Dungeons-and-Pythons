@@ -15,6 +15,7 @@ class Dungion():
         self.hero = None
         self.x = None
         self.y = None
+        self.fild_type=None
 
     def spawn(self, hero):
         assert isinstance(hero, Hero), 'Hero must be instance of Hero class '
@@ -55,24 +56,28 @@ class Dungion():
             'Direction must be up,down, left or right'
 
         if direction == 'up' and self.is_safe(self.x - 1, self.y):
+            self.fild_type=self.dungeon_map[self.x - 1][self.y]
             self.dungeon_map[self.x][self.y] = '.'
             self.dungeon_map[self.x - 1][self.y] = 'H'
             self.x -= 1
             return True
 
         elif direction == 'down' and self.is_safe(self.x + 1, self.y):
+            self.field_type = self.dungeon_map[self.x + 1][self.y]
             self.dungeon_map[self.x][self.y] = '.'
             self.dungeon_map[self.x + 1][self.y] = 'H'
             self.x += 1
             return True
 
         elif direction == 'left' and self.is_safe(self.x, self.y - 1):
+            self.field_type = self.dungeon_map[self.x][self.y - 1]
             self.dungeon_map[self.x][self.y] = '.'
             self.dungeon_map[self.x][self.y - 1] = 'H'
             self.y -= 1
             return True
 
         elif direction == 'right' and self.is_safe(self.x, self.y + 1):
+            self.field_type = self.dungeon_map[self.x][self.y + 1]
             self.dungeon_map[self.x][self.y] = '.'
             self.dungeon_map[self.x][self.y + 1] = 'H'
             self.y += 1
@@ -90,28 +95,12 @@ class Dungion():
         except IndexError:
             return False
 
-<<<<<<< HEAD
-
-# d = Dungion('map.txt')
-
-# a = d.spawn(Hero(name='ivan', title='Light', health=100,
-#                  mana=100, mana_regeneration_rate=2))
-# print(a)
-
-# a = d.spawn(Hero(name='ivan', title='Light', health=100,
-#                  mana=100, mana_regeneration_rate=2))
-# print(a)
-# a = d.spawn(Hero(name='ivan', title='Light', health=100,
-#                  mana=100, mana_regeneration_rate=2))
-# print(a)
-# d.print_map()
-=======
     def pick_treasure(self):
         t = []
         with open("loot.txt", 'r') as f:
             for i in f.readlines():
                 t.append(i)
-        tresure = t[randint(0,len(t))].split(",")
+        tresure = t[randint(0, len(t))].split(",")
 
         if tresure[0] == "weapon":
             tmp = float(tresure[2]) if '.' in tresure[2] else int(tresure[2])
@@ -120,7 +109,8 @@ class Dungion():
         elif tresure[0] == "spell":
             tmp = float(tresure[2]) if '.' in tresure[2] else int(tresure[2])
             tmp1 = float(tresure[3]) if '.' in tresure[3] else int(tresure[3])
-            tr = Spell(name=tresure[1], damage=tmp, mana_cost=tmp1, cast_range=int(tresure[4]))
+            tr = Spell(name=tresure[1], damage=tmp,
+                       mana_cost=tmp1, cast_range=int(tresure[4]))
             self.hero.learn(tr)
         else:
             if tresure[0] == "Mana potion":
@@ -131,7 +121,6 @@ class Dungion():
                 tr = "Health potion"
 
         return tr
-
 
     def where_are_you(self):
         if self.dungeon_map[self.x][self.y] == "T":
@@ -148,27 +137,26 @@ class Dungion():
 
     def check_for_enemy(self, ran):
         for i in range(1, ran):
-                if self.dungeon_map[self.x + i][self.y] == "E":
-                    print("There is enemy in range, you can start a fight!")
-                elif self.dungeon_map[self.x + i][self.y + i] == "E":
-                    print("There is enemy in range, you can start a fight!")
-                elif self.dungeon_map[self.x + i][self.y - i] == "E":
-                    print("There is enemy in range, you can start a fight!")
-                elif self.dungeon_map[self.x - i][self.y - i] == "E":
-                    print("There is enemy in range, you can start a fight!")
-                elif self.dungeon_map[self.x - i][self.y + i] == "E":
-                    print("There is enemy in range, you can start a fight!")
-                elif self.dungeon_map[self.x - i][self.y] == "E":
-                    print("There is enemy in range, you can start a fight!")
-                elif self.dungeon_map[self.x][self.y + i] == "E":
-                    print("There is enemy in range, you can start a fight!")
-                elif self.dungeon_map[self.x][self.y - i] == "E":
-                    print("There is enemy in range, you can start a fight!") 
-                else:
-                    print("There is no enemy in range!")
-                    return False
-                return True
-
+            if self.dungeon_map[self.x + i][self.y] == "E":
+                print("There is enemy in range, you can start a fight!")
+            elif self.dungeon_map[self.x + i][self.y + i] == "E":
+                print("There is enemy in range, you can start a fight!")
+            elif self.dungeon_map[self.x + i][self.y - i] == "E":
+                print("There is enemy in range, you can start a fight!")
+            elif self.dungeon_map[self.x - i][self.y - i] == "E":
+                print("There is enemy in range, you can start a fight!")
+            elif self.dungeon_map[self.x - i][self.y + i] == "E":
+                print("There is enemy in range, you can start a fight!")
+            elif self.dungeon_map[self.x - i][self.y] == "E":
+                print("There is enemy in range, you can start a fight!")
+            elif self.dungeon_map[self.x][self.y + i] == "E":
+                print("There is enemy in range, you can start a fight!")
+            elif self.dungeon_map[self.x][self.y - i] == "E":
+                print("There is enemy in range, you can start a fight!")
+            else:
+                print("There is no enemy in range!")
+                return False
+            return True
 
     def hero_attack(self, by):
         if by == "spell":
@@ -184,8 +172,8 @@ class Dungion():
 
 d = Dungion('map.txt')
 a = d.spawn(Hero(name='ivan', title='Light', health=100,
-                  mana=100, mana_regeneration_rate=2))
+                 mana=100, mana_regeneration_rate=2))
 d.print_map()
 
 d.move_hero('right')
->>>>>>> e7b9aa0cbcf7bbaa838eabec5dee8577b6040eb5
+
