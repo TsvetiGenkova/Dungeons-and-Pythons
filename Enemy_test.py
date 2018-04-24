@@ -9,22 +9,22 @@ from weapon_and_spells import Weapon
 class Test(unittest.TestCase):
 
     def setUp(self):
-        self.enemy = Enemy(health=50, mana=56, damage=50)
+        self.enemy = Enemy(health=50, mana=56, damage=50.0)
         self.enemy.learn(Spell(name='light', damage=52,
                                mana_cost=23, cast_range=2))
         self.enemy.equip(Weapon(name='ligh Axe', damage=66))
 
     def test_init(self):
         self.assertRaises(AssertionError, Enemy,
-                          health=50, mana=50, damage='23')
+                          health=50.0, mana=50, damage='23')
         self.assertRaises(AssertionError, Enemy,
-                          health=50, mana=50, damage=-23)
+                          health=50.0, mana=50, damage=-23)
         self.assertRaises(AssertionError, Enemy,
-                          health='50', mana=50, damage=23)
+                          health='50.0', mana=50, damage=23)
         self.assertRaises(AssertionError, Enemy, health=50,
-                          mana='50', damage='23')
+                          mana='50.0', damage='23')
         self.assertRaises(AssertionError, Enemy, health='50',
-                          mana='50', damage='23')
+                          mana='50.0', damage='23')
 
     def test_take_damage(self):
         self.assertRaises(AssertionError, self.enemy.take_damage, damage='5')

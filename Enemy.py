@@ -11,7 +11,7 @@ class Enemy(Person):
     def __init__(self, health, mana, damage):
         assert type(health) is int, 'health is not int'
         assert type(mana) is int, 'mana is not int'
-        assert type(damage) is int, 'damage is not int'
+        assert type(damage) is float, 'damage is not float'
         assert damage > 0, 'damage must be positeve'
 
         super().__init__(health, mana)
@@ -21,7 +21,7 @@ class Enemy(Person):
         self.weapon = None
 
     def take_damage(self, damage):
-        assert type(damage) is int, 'damage must be integer'
+        assert type(damage) is float, 'damage must be float'
         assert damage > 0, 'damege must positeve'
         self.health -= damage
 
