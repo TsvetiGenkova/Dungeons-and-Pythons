@@ -78,22 +78,3 @@ class Hero():
                 print(f"Your hero currently doesn\'t know any spells.")
 
             return damage
-            
-    def sortt(self):
-        spell_damage = self.spell.damage
-        weapon_damage = self.weapon.damage
-        enemy_damage = 22
-
-        ls = [spell_damage, weapon_damage, enemy_damage]
-        ls.sort(reverse=True)
-        print(ls)
-
-
-
-h = Hero(name="Bron", title="Dragonslayer", health=100, mana=100, mana_regeneration_rate=2)
-w1 = Weapon(name="The Axe of Destiny", damage=80)
-s1 = Spell(name="Fireball", damage=30, mana_cost=50, cast_range=2)
-h.equip(w1)
-h.learn(s1)
-
-print(h.sortt())

@@ -139,7 +139,7 @@ class Dungeon():
             print("You have cleared the dungeon!")
 
     def check_for_enemy(self, ran):
-        for i in range(0, ran):
+        for i in range(1, ran):
                 if (self.dungeon_map[self.x + i][self.y] == "E" or
                         self.dungeon_map[self.x - i][self.y] == "E" or
                         self.dungeon_map[self.x][self.y + i] == "E" or
@@ -159,7 +159,7 @@ class Dungeon():
                 print(f"You can\'t attack, because you don\'t know any spells.")
         if by == "weapon":
             if self.hero.weapon != None:
-                if self.check_for_enemy(0):
+                if self.check_for_enemy(1):
                     enemy = Enemy(health=100, mana=100, damage=20)
                     f = Fight(self.hero, enemy)
                     start_fight()
