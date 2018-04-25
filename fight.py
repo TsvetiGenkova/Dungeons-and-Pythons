@@ -8,7 +8,7 @@ class Fight(Hero, Enemy):
         self.hero = hero
         self.enemy = enemy
         self.dungeon = dun
-        self.hero_coord = (,)
+        self.hero_coord = (0,0)
 
     def check_enemy(self, ran):
         for x, y in enumerate(self.dungeon):
