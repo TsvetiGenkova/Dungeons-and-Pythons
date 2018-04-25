@@ -8,6 +8,7 @@ class Fight(Hero, Enemy):
         self.hero = hero
         self.enemy = enemy
         self.dungeon = dun
+        self.hero_coord = (,)
 
     def check_enemy(self, ran):
         for x, y in enumerate(self.dungeon):
@@ -15,6 +16,7 @@ class Fight(Hero, Enemy):
                 if y_value == 'H':
                     a = index
                     b = y_value
+        self.hero_coord = (a, b)
         for i in range(0, ran):
                 if (self.dungeon[a + i][b] == "E" or
                         self.dungeon_map[a - i][b] == "E" or
@@ -22,6 +24,9 @@ class Fight(Hero, Enemy):
                         self.dungeon_map[a][b - i] == "E"):
                     return True
         return False
+
+    def distance(self):
+        pass
 
     def hero_move(self):
         if self.hero.spell != None and self.hero.weapon != None:
