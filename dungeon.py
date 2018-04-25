@@ -17,9 +17,9 @@ class Dungeon():
         self.dungeon_map = self.load_map()
         self.spawning_cordinates = self.get_all_spawning_cordinates()
         self.hero = None
+        self.enemyes = self.get_enemys()
         self.x = None
         self.y = None
-        self.fild_type = None
 
     def spawn(self, hero):
         assert isinstance(hero, Hero), 'Hero must be instance of Hero class '
@@ -40,6 +40,17 @@ class Dungeon():
                 if y_value == 'S':
                     spawning_cordinates.append([(index, y_index), False])
         return spawning_cordinates
+
+    def get_enemys(self):
+        enemyes = []
+        for index, value in enumerate(self.dungeon_map):
+            for y_index, y_value in enumerate(value):
+                if y_value == 'E':
+                    enemyes.append([(index, y_index), self.generate_enemy()])
+        return enemyes
+
+    def generate_enemy(self):
+        return Enemy(health=55, mana=55, damage=55.0)
 
     def load_map(self):
         m = []
@@ -100,7 +111,7 @@ class Dungeon():
         with open("loot.txt", 'r') as f:
             for i in f.readlines():
                 t.append(i)
-        treasure = t[randint(0, len(t))].split(",")
+        treasure = t[randint(0, len(t)-1)].split(",")
         if treasure[0] == "weapon":
             tmp = float(treasure[2]) if '.' in treasure[2] else int(
                 treasure[2])
