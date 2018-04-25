@@ -14,5 +14,3 @@ Mana potion, 40
 Health potion, 10
 Health potion, 20
 Health potion, 25
-
-

@@ -1,16 +1,16 @@
 from weapon_and_spells import Weapon
 from weapon_and_spells import Spell
+from Person import Person
 
-class Hero():
+
+class Hero(Person):
     def __init__(self, name, title, health=100, mana=100, mana_regeneration_rate=2):
         assert type(health) is int
         assert type(mana) is int
         assert type(mana_regeneration_rate) is int
-
+        super().__init__(health, mana)
         self.name = name
         self.title = title
-        self.health = health
-        self.mana = mana
         self.max_mana = mana
         self.mana_regeneration_rate = mana_regeneration_rate
         self.weapon = None
@@ -78,7 +78,7 @@ class Hero():
                 print(f"Your hero currently doesn\'t know any spells.")
 
             return damage
-            
+
     def sortt(self):
         spell_damage = self.spell.damage
         weapon_damage = self.weapon.damage
@@ -89,8 +89,8 @@ class Hero():
         print(ls)
 
 
-
-h = Hero(name="Bron", title="Dragonslayer", health=100, mana=100, mana_regeneration_rate=2)
+h = Hero(name="Bron", title="Dragonslayer", health=100,
+         mana=100, mana_regeneration_rate=2)
 w1 = Weapon(name="The Axe of Destiny", damage=80)
 s1 = Spell(name="Fireball", damage=30, mana_cost=50, cast_range=2)
 h.equip(w1)
