@@ -79,3 +79,7 @@ class Enemy(Person):
             return True
         return False
 
+
+    def __str__(self):
+        return f'Enemy (health = {self.health} , mana = {self.mana}))'
+

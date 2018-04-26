@@ -6,25 +6,27 @@ class Fight(Hero, Enemy):
         assert isinstance(hero, Hero), 'Hero must be instance of Hero class.'
         assert isinstance(
             enemy, Enemy), 'Enemy must be instance of Enemy class.'
+        assert type(enemy_coords) is tuple, 'enemy cords must be tuple'
+        assert type(dun) is list, 'dungion must be list of lists'
         self.hero = hero
         self.enemy = enemy
         self.dungeon = dun
         self.enemy_coords = enemy_coords
-        self.hero_coord = (0,0)
+        self.hero_coord = (0, 0)
 
     def check_enemy(self, ran):
-        for x, y in enumerate(self.dungeon):
-            for y_value in value:
+        for x, value in enumerate(self.dungeon):
+            for y, y_value in enumerate(value):
                 if y_value == 'H':
-                    a = index
-                    b = y_value
+                    a = x
+                    b = y
         self.hero_coord = (a, b)
         for i in range(0, ran):
-                if (self.dungeon[a + i][b] == "E" or
-                        self.dungeon_map[a - i][b] == "E" or
-                        self.dungeon_map[a][b + i] == "E" or
-                        self.dungeon_map[a][b - i] == "E"):
-                    return True
+            if (self.dungeon[a + i][b] == "E" or
+                    self.dungeon[a - i][b] == "E" or
+                    self.dungeon[a][b + i] == "E" or
+                    self.dungeon[a][b - i] == "E"):
+                return True
         return False
 
     def distance(self):
@@ -40,7 +42,7 @@ class Fight(Hero, Enemy):
                 #move right
                 Fight.move(instance, self.dungeon, self.enemy_coords[0], self.enemy_coords[1], "right")
                 print(f"The enemy has moved one square to the right in order to get to the hero. This is his move.")
-        elif if self.distance()[1] == 0:
+        elif self.distance()[1] == 0:
             if self.distance()[0] < 0:
                 #move up
                 Fight.move(instance, self.dungeon, self.enemy_coords[0], self.enemy_coords[1], "up")
@@ -58,9 +60,10 @@ class Fight(Hero, Enemy):
                 self.enemy.take_damage(self.hero.attack(by="spell"))
                 print(f"Hero casts {self.hero.spell.name} for {self.hero.spell.damage} damage. Enemy health is: {self.enemy.health}")
             elif not self.check_enemy(1) and not self.hero.can_cast():
-                print("Noooooo. Your hero can\'t casts a spell. Looks like he is doomed!")
+                print(
+                    "Noooooo. Your hero can\'t casts a spell. Looks like he is doomed!")
             elif self.check_enemy(1):
-                if self.hero.spell.damage < self.hero.weapon.damage: 
+                if self.hero.spell.damage < self.hero.weapon.damage:
                     self.enemy.take_damage(self.hero.attack(by="weapon"))
                     print(f"Hero hits with {self.hero.weapon.name} for {self.hero.weapon.damage} damage. Enemy health is: {self.enemy.health}")
                 elif not self.hero.can_cast():
@@ -129,12 +132,12 @@ class Fight(Hero, Enemy):
 
     def start_fight(self):
         print(f"A fight is started between our {self.hero} and {self.enemy}")
-        while self.hero.health == 0 or self.enemy.health == 0:
-            self.hero_move()
-            self.enemy_move()
+        while self.hero.is_alive() == True and self.enemy.is_alive() == True:
+            self.hero_fight()
+            self.enemy_fight()
             self.hero.take_mana(self.hero.mana_regeneration_rate)
-
-        if self.hero.health == 0:
+            print('DSADAS')
+        if self.hero.is_alive() == False:
             print("Your hero is dead!")
-        else:
+        elif self.enemy.is_alive() == False:
             print("The enemy is dead!")

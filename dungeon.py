@@ -8,6 +8,7 @@ from weapon_and_spells import Weapon
 from utils import Move
 
 
+
 class Dungeon(Move):
 
     def __init__(self, map_file):
@@ -72,16 +73,16 @@ class Dungeon(Move):
         with open("loot.txt", 'r') as f:
             for i in f.readlines():
                 t.append(i)
-        treasure = t[randint(0, len(t)-1)].split(",")
+        treasure = t[randint(0, len(t) - 1)].split(",")
         if treasure[0] == "weapon":
-            tmp = float(treasure[2]) if '.' in treasure[2] else int(
+            tmp = float(treasure[2]) if '.' in treasure[2] else float(
                 treasure[2])
             tr = Weapon(name=treasure[1], damage=tmp)
             self.hero.equip(tr)
         elif treasure[0] == "spell":
-            tmp = float(treasure[2]) if '.' in treasure[2] else int(
+            tmp = float(treasure[2]) if '.' in treasure[2] else float(
                 treasure[2])
-            tmp1 = float(treasure[3]) if '.' in treasure[3] else int(
+            tmp1 = float(treasure[3]) if '.' in treasure[3] else float(
                 treasure[3])
             tr = Spell(name=treasure[1], damage=tmp,
                        mana_cost=tmp1, cast_range=int(treasure[4]))
@@ -103,7 +104,7 @@ class Dungeon(Move):
             dun = self.dungeon_map
             for i in self.enemyes:
                 if i[0][0] == x and i[0][1] == y:
-                    enemy_coords = i
+                    enemy_coords = i[0]
                     enemy = i[1]
                     break
             f = Fight(self.hero, enemy, enemy_coords, dun)
