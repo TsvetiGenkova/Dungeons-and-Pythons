@@ -17,6 +17,7 @@ class Dungeon(Move):
         self.map_file = map_file
         self.dungeon_map = self.load_map()
         self.spawning_cordinates = self.get_all_spawning_cordinates()
+        self.treasure_cordinates = self.get_all_trasure_cordinates()
         self.hero = None
         self.enemyes = self.get_enemys()
         self.x = None
@@ -72,9 +73,10 @@ class Dungeon(Move):
         self.x = changes[0]
         self.y = changes[1]
         self.dungeon_map = changes[2]
-        if (self.x,self.y) is self.get_all_trasure_cordinates():
-            print('idi')
-            self.pick_treasure()
+        if (self.x,self.y) in self.treasure_cordinates:
+            
+            mesege = self.pick_treasure()
+            print(f'found {mesege}')
         return True
 
     def pick_treasure(self):
