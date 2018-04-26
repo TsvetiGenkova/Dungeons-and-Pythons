@@ -7,28 +7,26 @@ def check_for_enemy(dungeon_map, x, y, ran):
             return True
     return False
 
+def is_safe(dungeon_map, x, y):
+    assert type(x) is int, 'x must be int'
+    assert type(y) is int, 'y must be int'
+    try:
+        dungeon_map[x][y]
+        if dungeon_map[x][y] == '#':
+            return False
+        return True
+    except IndexError:
+        return False
 
+
+def move_util(abrv, dungeon_map, curr_x, curr_y, x, y):
+    #self.where_are_you(curr_x + x, curr_y + y)
+    dungeon_map[curr_x][curr_y] = '.'
+    dungeon_map[curr_x + x][curr_y + y] = abrv
+    curr_y += y
+    curr_x += x
 
 class Move():
-
-    def is_safe(dungeon_map, x, y):
-        assert type(x) is int, 'x must be int'
-        assert type(y) is int, 'y must be int'
-        try:
-            dungeon_map[x][y]
-            if dungeon_map[x][y] == '#':
-                return False
-            return True
-        except IndexError:
-            return False
-
-
-    def move_util(abrv, dungeon_map, curr_x, curr_y, x, y):
-        #self.where_are_you(curr_x + x, curr_y + y)
-        dungeon_map[curr_x][curr_y] = '.'
-        dungeon_map[curr_x + x][curr_y + y] = abrv
-        curr_y += y
-        curr_x += x
 
     @classmethod
     def move(cls, dungeon_map, curr_x, curr_y, direction):

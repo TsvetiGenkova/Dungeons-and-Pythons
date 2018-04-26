@@ -10,7 +10,7 @@ from utils import check_for_enemy
 
 
 
-class Dungeon(Move, CheckSurroundings):
+class Dungeon(Move):
 
     def __init__(self, map_file):
         assert type(map_file) is str, 'map_file must be string'
