@@ -111,7 +111,7 @@ class Dungeon():
         with open("loot.txt", 'r') as f:
             for i in f.readlines():
                 t.append(i)
-        treasure = t[randint(0, len(t)-1)].split(",")
+        treasure = t[randint(0, len(t) - 1)].split(",")
         if treasure[0] == "weapon":
             tmp = float(treasure[2]) if '.' in treasure[2] else int(
                 treasure[2])
