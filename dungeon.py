@@ -1,8 +1,11 @@
 import os
 
-from fight import Fight
+# from fight import Fight
 from hero import Hero
 from enemy import Enemy
+from random import randint
+from weapon_and_spells import Spell
+from weapon_and_spells import Weapon
 
 
 class Dungeon():
@@ -14,6 +17,7 @@ class Dungeon():
         self.dungeon_map = self.load_map()
         self.spawning_cordinates = self.get_all_spawning_cordinates()
         self.hero = None
+        self.enemyes = self.get_enemys()
         self.x = None
         self.y = None
 
@@ -37,6 +41,17 @@ class Dungeon():
                     spawning_cordinates.append([(index, y_index), False])
         return spawning_cordinates
 
+    def get_enemys(self):
+        enemyes = []
+        for index, value in enumerate(self.dungeon_map):
+            for y_index, y_value in enumerate(value):
+                if y_value == 'E':
+                    enemyes.append([(index, y_index), self.generate_enemy()])
+        return enemyes
+
+    def generate_enemy(self):
+        return Enemy(health=55, mana=55, damage=55.0)
+
     def load_map(self):
         m = []
         with open(self.map_file, 'r') as f:
@@ -57,33 +72,28 @@ class Dungeon():
             'Direction must be up,down, left or right'
 
         if direction == 'up' and self.is_safe(self.x - 1, self.y):
-            self.where_are_you(self.x - 1, self.y)
-            self.dungeon_map[self.x][self.y] = '.'
-            self.dungeon_map[self.x - 1][self.y] = 'H'
-            self.x -= 1
+            self.move_util(-1, 0)
             return True
 
         elif direction == 'down' and self.is_safe(self.x + 1, self.y):
-            self.where_are_you(self.x + 1, self.y)
-            self.dungeon_map[self.x][self.y] = '.'
-            self.dungeon_map[self.x + 1][self.y] = 'H'
-            self.x += 1
+            self.move_util(1, 0)
             return True
 
         elif direction == 'left' and self.is_safe(self.x, self.y - 1):
-            self.where_are_you(self.x, self.y - 1)
-            self.dungeon_map[self.x][self.y] = '.'
-            self.dungeon_map[self.x][self.y - 1] = 'H'
-            self.y -= 1
+            self.move_util(0, -1)
             return True
 
         elif direction == 'right' and self.is_safe(self.x, self.y + 1):
-            self.where_are_you(self.x, self.y + 1)
-            self.dungeon_map[self.x][self.y] = '.'
-            self.dungeon_map[self.x][self.y + 1] = 'H'
-            self.y += 1
+            self.move_util(0, 1)
             return True
         return False
+
+    def move_util(self, x, y):
+        self.where_are_you(self.x + x, self.y + y)
+        self.dungeon_map[self.x][self.y] = '.'
+        self.dungeon_map[self.x + x][self.y + y] = 'H'
+        self.y += y
+        self.x += x
 
     def is_safe(self, x, y):
         assert type(x) is int, 'x must be int'
@@ -101,16 +111,19 @@ class Dungeon():
         with open("loot.txt", 'r') as f:
             for i in f.readlines():
                 t.append(i)
-        treasure = t[randint(0,len(t))].split(",")
-
+        treasure = t[randint(0, len(t)-1)].split(",")
         if treasure[0] == "weapon":
-            tmp = float(treasure[2]) if '.' in treasure[2] else int(treasure[2])
+            tmp = float(treasure[2]) if '.' in treasure[2] else int(
+                treasure[2])
             tr = Weapon(name=treasure[1], damage=tmp)
             self.hero.equip(tr)
         elif treasure[0] == "spell":
-            tmp = float(treasure[2]) if '.' in treasure[2] else int(treasure[2])
-            tmp1 = float(treasure[3]) if '.' in treasure[3] else int(treasure[3])
-            tr = Spell(name=treasure[1], damage=tmp, mana_cost=tmp1, cast_range=int(treasure[4]))
+            tmp = float(treasure[2]) if '.' in treasure[2] else int(
+                treasure[2])
+            tmp1 = float(treasure[3]) if '.' in treasure[3] else int(
+                treasure[3])
+            tr = Spell(name=treasure[1], damage=tmp,
+                       mana_cost=tmp1, cast_range=int(treasure[4]))
             self.hero.learn(tr)
         else:
             if treasure[0] == "Mana potion":
@@ -122,15 +135,18 @@ class Dungeon():
 
         return tr
 
-
     def where_are_you(self, x, y):
         if self.dungeon_map[x][y] == "T":
             return f"Found {self.pick_treasure()}!"
         elif self.dungeon_map[x][y] == "E":
             dun = self.dungeon_map
-            enemy = Enemy(health=100, mana=100, damage=20)
-            f = Fight(self.hero, enemy, dun)
-            start_fight()
+            for i in self.enemyes:
+                if i[0][0] == x and i[0][1] == y:
+                    enemy_coords = i
+                    enemy = i[1]
+                    break
+            f = Fight(self.hero, enemy, enemy_coords, dun)
+            f.start_fight()
         elif self.dungeon_map[x][y] == ".":
             pass
         elif self.dungeon_map[x][y] == "S":
@@ -140,11 +156,11 @@ class Dungeon():
 
     def check_for_enemy(self, ran):
         for i in range(1, ran):
-                if (self.dungeon_map[self.x + i][self.y] == "E" or
-                        self.dungeon_map[self.x - i][self.y] == "E" or
-                        self.dungeon_map[self.x][self.y + i] == "E" or
-                        self.dungeon_map[self.x][self.y - i] == "E"):
-                    return True
+            if (self.dungeon_map[self.x + i][self.y] == "E" or
+                    self.dungeon_map[self.x - i][self.y] == "E" or
+                    self.dungeon_map[self.x][self.y + i] == "E" or
+                    self.dungeon_map[self.x][self.y - i] == "E"):
+                return True
         return False
 
     def hero_attack(self, by):
@@ -161,7 +177,10 @@ class Dungeon():
             if self.hero.weapon != None:
                 if self.check_for_enemy(1):
                     enemy = Enemy(health=100, mana=100, damage=20)
+                if self.check_for_enemy(0):
+                    enemy = Enemy(health=100, mana=100, damage=20.0)
                     f = Fight(self.hero, enemy)
                     start_fight()
             else:
                 print(f"You can\'t attack, because you don\'t have a weapon.")
+

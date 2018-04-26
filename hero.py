@@ -1,16 +1,16 @@
 from weapon_and_spells import Weapon
 from weapon_and_spells import Spell
+from Person import Person
 
-class Hero():
+
+class Hero(Person):
     def __init__(self, name, title, health=100, mana=100, mana_regeneration_rate=2):
         assert type(health) is int
         assert type(mana) is int
         assert type(mana_regeneration_rate) is int
-
+        super().__init__(health, mana)
         self.name = name
         self.title = title
-        self.health = health
-        self.mana = mana
         self.max_mana = mana
         self.mana_regeneration_rate = mana_regeneration_rate
         self.weapon = None
@@ -76,5 +76,5 @@ class Hero():
             else:
                 damage = 0
                 print(f"Your hero currently doesn\'t know any spells.")
-
+                
             return damage
