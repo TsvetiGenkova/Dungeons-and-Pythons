@@ -76,5 +76,9 @@ class Hero(Person):
             else:
                 damage = 0
                 print(f"Your hero currently doesn\'t know any spells.")
-                
-            return damage
+
+            return float(damage)
+
+
+    def __str__(self):
+        return f'Hero {self.name} , {self.title}, {self.health}, {self.health}'
