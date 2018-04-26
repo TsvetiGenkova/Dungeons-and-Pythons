@@ -1,3 +1,13 @@
+def check_for_enemy(dungeon_map, x, y, ran):
+    for i in range(1, ran):
+        if (dungeon_map[x + i][y] == "E" or
+                dungeon_map[x - i][y] == "E" or
+                dungeon_map[x][y + i] == "E" or
+                dungeon_map[x][y - i] == "E"):
+            return True
+    return False
+
+
 
 class Move():
 

@@ -6,10 +6,11 @@ from random import randint
 from weapon_and_spells import Spell
 from weapon_and_spells import Weapon
 from utils import Move
+from utils import check_for_enemy
 
 
 
-class Dungeon(Move):
+class Dungeon(Move, CheckSurroundings):
 
     def __init__(self, map_file):
         assert type(map_file) is str, 'map_file must be string'
@@ -116,20 +117,12 @@ class Dungeon(Move):
         elif self.dungeon_map[x][y] == "G":
             print("You have cleared the dungeon!")
 
-    def check_for_enemy(self, ran):
-        for i in range(1, ran):
-            if (self.dungeon_map[self.x + i][self.y] == "E" or
-                    self.dungeon_map[self.x - i][self.y] == "E" or
-                    self.dungeon_map[self.x][self.y + i] == "E" or
-                    self.dungeon_map[self.x][self.y - i] == "E"):
-                return True
-        return False
 
     def hero_attack(self, by):
         if by == "spell":
             if self.hero.spell != None:
                 ran = self.hero.spell.cast_range
-                if self.check_for_enemy(ran):
+                if check_for_enemy(self.dungeon_map, self.x, self.y, ran):
                     enemy = Enemy(health=100, mana=100, damage=20)
                     f = Fight(self.hero, enemy)
                     start_fight()
@@ -137,9 +130,9 @@ class Dungeon(Move):
                 print(f"You can\'t attack, because you don\'t know any spells.")
         if by == "weapon":
             if self.hero.weapon != None:
-                if self.check_for_enemy(1):
+                if self.check_for_enemy(self.dungeon_map, self.x, self.y, 1):
                     enemy = Enemy(health=100, mana=100, damage=20)
-                if self.check_for_enemy(0):
+                if self.check_for_enemy(self.dungeon_map, self.x, self.y, 1):
                     enemy = Enemy(health=100, mana=100, damage=20.0)
                     f = Fight(self.hero, enemy)
                     start_fight()

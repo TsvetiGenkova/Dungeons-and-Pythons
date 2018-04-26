@@ -1,7 +1,9 @@
 from hero import Hero
 from enemy import Enemy
+from utils import Move
+from utils import check_for_enemy
 
-class Fight(Hero, Enemy):
+class Fight(Hero, Enemy, Move):
     def __init__(self, hero, enemy, enemy_coords, dun):
         assert isinstance(hero, Hero), 'Hero must be instance of Hero class.'
         assert isinstance(
@@ -21,13 +23,7 @@ class Fight(Hero, Enemy):
                     a = x
                     b = y
         self.hero_coord = (a, b)
-        for i in range(0, ran):
-            if (self.dungeon[a + i][b] == "E" or
-                    self.dungeon[a - i][b] == "E" or
-                    self.dungeon[a][b + i] == "E" or
-                    self.dungeon[a][b - i] == "E"):
-                return True
-        return False
+        return check_for_enemy(self.dungeon, self.hero_coord[0], self.hero_coord[1], ran)
 
     def distance(self):
         return (self.hero_coord[0] - self.enemy_coords[0], self.hero_coord[1] - self.enemy_coords[1])
