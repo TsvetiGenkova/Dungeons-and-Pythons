@@ -185,3 +185,16 @@ class Dungeon():
             else:
                 print(f"You can\'t attack, because you don\'t have a weapon.")
 
+
+
+
+d = Dungeon('map.txt')
+d.spawn(Hero(name='ivan', title='ivanov', health=100, mana=100, mana_regeneration_rate=2))
+
+d.move_hero('right')
+d.move_hero('down')
+d.move_hero('down')
+d.move_hero('down')
+d.print_map()
+d.move_hero('right')
+d.print_map()
