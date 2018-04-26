@@ -73,6 +73,7 @@ class Dungeon(Move):
         self.y = changes[1]
         self.dungeon_map = changes[2]
         if (self.x,self.y) is self.get_all_trasure_cordinates():
+            print('idi')
             self.pick_treasure()
         return True
 
@@ -149,8 +150,8 @@ class Dungeon(Move):
         trasures = []
         for index, value in enumerate(self.dungeon_map):
             for y_index, y_value in enumerate(value):
-                if y_value == 'S':
-                    trasures.append([(index, y_index), False])
+                if y_value == 'T':
+                    trasures.append((index, y_index))
         return trasures
 
 
