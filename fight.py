@@ -1,7 +1,6 @@
 from hero import Hero
 from enemy import Enemy
 
-
 class Fight(Hero, Enemy):
     def __init__(self, hero, enemy, enemy_coords, dun):
         assert isinstance(hero, Hero), 'Hero must be instance of Hero class.'
@@ -35,24 +34,20 @@ class Fight(Hero, Enemy):
         if self.distance()[0] == 0:
             if self.distance()[1] < 0:
                 #move left
-                self.dungeon[self.enemy_coords[0]][self.enemy_coords[1]] = '.'
-                self.dungeon[self.enemy_coords[0] + 1][self.enemy_coords[1]] = 'Е'
+                Fight.move(self.dungeon, self.enemy_coords[0], self.enemy_coords[1], "left")
                 print(f"The enemy has moved one square to the left in order to get to the hero. This is his move.")
             else:
                 #move right
-                self.dungeon[self.enemy_coords[0]][self.enemy_coords[1]] = '.'
-                self.dungeon[self.enemy_coords[0] - 1][self.enemy_coords[1]] = 'Е'
+                Fight.move(instance, self.dungeon, self.enemy_coords[0], self.enemy_coords[1], "right")
                 print(f"The enemy has moved one square to the right in order to get to the hero. This is his move.")
         elif if self.distance()[1] == 0:
             if self.distance()[0] < 0:
                 #move up
-                self.dungeon[self.enemy_coords[0]][self.enemy_coords[1]] = '.'
-                self.dungeon[self.enemy_coords[0]][self.enemy_coords[1] + 1] = 'Е'
+                Fight.move(instance, self.dungeon, self.enemy_coords[0], self.enemy_coords[1], "up")
                 print(f"The enemy has moved one square up in order to get to the hero. This is his move.")
             else:
                 #move down
-                self.dungeon[self.enemy_coords[0]][self.enemy_coords[1]] = '.'
-                self.dungeon[self.enemy_coords[0]][self.enemy_coords[1] - 1] = 'Е'
+                Fight.move(instance, self.dungeon, self.enemy_coords[0], self.enemy_coords[1], "down")
                 print(f"The enemy has moved one square down in order to get to the hero. This is his move.")
 
         return self.dungeon
