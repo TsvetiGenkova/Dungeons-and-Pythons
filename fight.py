@@ -33,23 +33,23 @@ class Fight(Hero, Enemy, Move):
         if self.distance()[0] == 0:
             if self.distance()[1] < 0:
                 # move left
-                Fight.move(
+                Enemy.move(
                     self.dungeon, self.enemy_coords[0], self.enemy_coords[1], "left")
                 print(f"The enemy has moved one square to the left in order to get to the hero. This is his move.")
             else:
                 # move right
-                Fight.move(instance, self.dungeon,
+                Enemy.move(instance, self.dungeon,
                            self.enemy_coords[0], self.enemy_coords[1], "right")
                 print(f"The enemy has moved one square to the right in order to get to the hero. This is his move.")
         elif self.distance()[1] == 0:
             if self.distance()[0] < 0:
                 # move up
-                Fight.move(instance, self.dungeon,
+                Enemy.move(instance, self.dungeon,
                            self.enemy_coords[0], self.enemy_coords[1], "up")
                 print(f"The enemy has moved one square up in order to get to the hero. This is his move.")
             else:
                 # move down
-                Fight.move(instance, self.dungeon,
+                Enemy.move(instance, self.dungeon,
                            self.enemy_coords[0], self.enemy_coords[1], "down")
                 print(f"The enemy has moved one square down in order to get to the hero. This is his move.")
 

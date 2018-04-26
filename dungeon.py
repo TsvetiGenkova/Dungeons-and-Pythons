@@ -73,8 +73,8 @@ class Dungeon(Move):
         self.x = changes[0]
         self.y = changes[1]
         self.dungeon_map = changes[2]
-        if (self.x,self.y) in self.treasure_cordinates:
-            
+        if (self.x, self.y) in self.treasure_cordinates:
+            self.treasure_cordinates.remove((self.x, self.y))
             mesege = self.pick_treasure()
             print(f'found {mesege}')
         return True
@@ -101,31 +101,12 @@ class Dungeon(Move):
         else:
             if treasure[0] == "Mana potion":
                 self.hero.take_mana(int(treasure[1]))
-                tr = "Mana potion"
+                tr = f"Mana potion = {int(treasure[1])} mana"
             elif treasure[0] == "Health potion":
                 self.hero.take_healing(int(treasure[1]))
-                tr = "Health potion"
+                tr = f"Health potion {int(treasure[1])} health"
 
         return tr
-
-    def where_are_you(self, x, y):
-        if self.dungeon_map[x][y] == "T":
-            return f"Found {self.pick_treasure()}!"
-        elif self.dungeon_map[x][y] == "E":
-            dun = self.dungeon_map
-            for i in self.enemyes:
-                if i[0][0] == x and i[0][1] == y:
-                    enemy_coords = i[0]
-                    enemy = i[1]
-                    break
-            f = Fight(self.hero, enemy, enemy_coords, dun)
-            f.start_fight()
-        elif self.dungeon_map[x][y] == ".":
-            pass
-        elif self.dungeon_map[x][y] == "S":
-            pass
-        elif self.dungeon_map[x][y] == "G":
-            print("You have cleared the dungeon!")
 
     def hero_attack(self, by):
         if by == "spell":
@@ -135,18 +116,24 @@ class Dungeon(Move):
                     enemy = Enemy(health=100, mana=100, damage=20)
                     f = Fight(self.hero, enemy)
                     start_fight()
+                    return True
+                else:
+                    return False
             else:
                 print(f"You can\'t attack, because you don\'t know any spells.")
         if by == "weapon":
             if self.hero.weapon != None:
                 if self.check_for_enemy(self.dungeon_map, self.x, self.y, 1):
-                    enemy = Enemy(health=100, mana=100, damage=20)
-                if self.check_for_enemy(self.dungeon_map, self.x, self.y, 1):
                     enemy = Enemy(health=100, mana=100, damage=20.0)
+                    ##find a way to get enemy cords
                     f = Fight(self.hero, enemy)
-                    start_fight()
+                    f.start_fight()
+                    return True
+                else:
+                    return False
             else:
                 print(f"You can\'t attack, because you don\'t have a weapon.")
+                return False
 
     def get_all_trasure_cordinates(self):
         trasures = []
@@ -156,12 +143,32 @@ class Dungeon(Move):
                     trasures.append((index, y_index))
         return trasures
 
+    def check_for_enemy(self, dungeon_map, x, y, ran):
+        if ran == 1:
+            return (dungeon_map[x + 1][y] == "E" or
+                    dungeon_map[x - 1][y] == "E" or
+                    dungeon_map[x][y + 1] == "E" or
+                    dungeon_map[x][y - 1] == "E")
+        for i in range(1, ran):
+            if (dungeon_map[x + i][y] == "E" or
+                    dungeon_map[x - i][y] == "E" or
+                    dungeon_map[x][y + i] == "E" or
+                    dungeon_map[x][y - i] == "E"):
+                return True
+        return False
+
+
+    def get_closest_enemy(self):
+        pass
+        
+
 
 d = Dungeon('map.txt')
-d.spawn(Hero(name='ivan', title='ivanov', health=100,
-             mana=100, mana_regeneration_rate=2))
+h = Hero(name='ivan', title='ivanov', health=100,
+         mana=100, mana_regeneration_rate=2)
 
-d.move_hero('right')
-d.move_hero('down')
-d.move_hero('down')
+h.equip(Weapon(name='ubiec', damage=32.0))
+d.spawn(h)
 d.print_map()
+result = d.hero_attack(by='weapon')
+print(result)

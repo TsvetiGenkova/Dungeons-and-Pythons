@@ -11,6 +11,10 @@ class Weapon():
         return self.damage
 
 
+    def __str__(self):
+        return f' Weapon {self.name} damage = {self.damage}'
+
+
 class Spell():
     def __init__(self, name, damage, mana_cost, cast_range):
         self.name = name
@@ -42,3 +46,6 @@ class Spell():
 
     def get_cast_range(self):
         return self.cast_range
+
+    def __str__(self):
+        return f'Spell {self.name} damage = {self.damage} mana_cost = {self.mana_cost} range = {self.cast_range}'
