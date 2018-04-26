@@ -1,8 +1,9 @@
 from hero import Hero
 from enemy import Enemy
+from utils import Move
+from utils import check_for_enemy
 
-
-class Fight(Hero, Enemy):
+class Fight(Hero, Enemy, Move):
     def __init__(self, hero, enemy, enemy_coords, dun):
         assert isinstance(hero, Hero), 'Hero must be instance of Hero class.'
         assert isinstance(
@@ -22,13 +23,7 @@ class Fight(Hero, Enemy):
                     a = x
                     b = y
         self.hero_coord = (a, b)
-        for i in range(0, ran):
-            if (self.dungeon[a + i][b] == "E" or
-                    self.dungeon[a - i][b] == "E" or
-                    self.dungeon[a][b + i] == "E" or
-                    self.dungeon[a][b - i] == "E"):
-                return True
-        return False
+        return check_for_enemy(self.dungeon, self.hero_coord[0], self.hero_coord[1], ran)
 
     def distance(self):
         return (self.hero_coord[0] - self.enemy_coords[0], self.hero_coord[1] - self.enemy_coords[1])
@@ -36,29 +31,21 @@ class Fight(Hero, Enemy):
     def move_enemy(self):
         if self.distance()[0] == 0:
             if self.distance()[1] < 0:
-                # move left
-                self.dungeon[self.enemy_coords[0]][self.enemy_coords[1]] = '.'
-                self.dungeon[self.enemy_coords[0] +
-                             1][self.enemy_coords[1]] = 'Е'
+                #move left
+                Fight.move(self.dungeon, self.enemy_coords[0], self.enemy_coords[1], "left")
                 print(f"The enemy has moved one square to the left in order to get to the hero. This is his move.")
             else:
-                # move right
-                self.dungeon[self.enemy_coords[0]][self.enemy_coords[1]] = '.'
-                self.dungeon[self.enemy_coords[0] -
-                             1][self.enemy_coords[1]] = 'Е'
+                #move right
+                Fight.move(instance, self.dungeon, self.enemy_coords[0], self.enemy_coords[1], "right")
                 print(f"The enemy has moved one square to the right in order to get to the hero. This is his move.")
         elif self.distance()[1] == 0:
             if self.distance()[0] < 0:
-                # move up
-                self.dungeon[self.enemy_coords[0]][self.enemy_coords[1]] = '.'
-                self.dungeon[self.enemy_coords[0]
-                             ][self.enemy_coords[1] + 1] = 'Е'
+                #move up
+                Fight.move(instance, self.dungeon, self.enemy_coords[0], self.enemy_coords[1], "up")
                 print(f"The enemy has moved one square up in order to get to the hero. This is his move.")
             else:
-                # move down
-                self.dungeon[self.enemy_coords[0]][self.enemy_coords[1]] = '.'
-                self.dungeon[self.enemy_coords[0]
-                             ][self.enemy_coords[1] - 1] = 'Е'
+                #move down
+                Fight.move(instance, self.dungeon, self.enemy_coords[0], self.enemy_coords[1], "down")
                 print(f"The enemy has moved one square down in order to get to the hero. This is his move.")
 
         return self.dungeon

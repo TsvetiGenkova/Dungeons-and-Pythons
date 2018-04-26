@@ -1,15 +1,16 @@
 import os
-
-# from fight import Fight
+from fight import Fight
 from hero import Hero
 from enemy import Enemy
 from random import randint
 from weapon_and_spells import Spell
 from weapon_and_spells import Weapon
-from fight import Fight
+from utils import Move
+from utils import check_for_enemy
 
 
-class Dungeon():
+
+class Dungeon(Move, CheckSurroundings):
 
     def __init__(self, map_file):
         assert type(map_file) is str, 'map_file must be string'
@@ -66,46 +67,7 @@ class Dungeon():
             print(''.join(i))
 
     def move_hero(self, direction):
-        assert type(direction) is str, 'Direction must be string'
-        "up", "down", "left" and "right"
-        assert direction == 'up' or direction == 'down' \
-            or direction == 'left' or direction == 'right',\
-            'Direction must be up,down, left or right'
-
-        if direction == 'up' and self.is_safe(self.x - 1, self.y):
-            self.move_util(-1, 0)
-            return True
-
-        elif direction == 'down' and self.is_safe(self.x + 1, self.y):
-            self.move_util(1, 0)
-            return True
-
-        elif direction == 'left' and self.is_safe(self.x, self.y - 1):
-            self.move_util(0, -1)
-            return True
-
-        elif direction == 'right' and self.is_safe(self.x, self.y + 1):
-            self.move_util(0, 1)
-            return True
-        return False
-
-    def move_util(self, x, y):
-        self.where_are_you(self.x + x, self.y + y)
-        self.dungeon_map[self.x][self.y] = '.'
-        self.dungeon_map[self.x + x][self.y + y] = 'H'
-        self.y += y
-        self.x += x
-
-    def is_safe(self, x, y):
-        assert type(x) is int, 'x must be int'
-        assert type(y) is int, 'y must be int'
-        try:
-            self.dungeon_map[x][y]
-            if self.dungeon_map[x][y] == '#':
-                return False
-            return True
-        except IndexError:
-            return False
+        Dungeon.move(self.dungeon_map, self.x, self.y, direction)
 
     def pick_treasure(self):
         t = []
@@ -155,20 +117,12 @@ class Dungeon():
         elif self.dungeon_map[x][y] == "G":
             print("You have cleared the dungeon!")
 
-    def check_for_enemy(self, ran):
-        for i in range(1, ran):
-            if (self.dungeon_map[self.x + i][self.y] == "E" or
-                    self.dungeon_map[self.x - i][self.y] == "E" or
-                    self.dungeon_map[self.x][self.y + i] == "E" or
-                    self.dungeon_map[self.x][self.y - i] == "E"):
-                return True
-        return False
 
     def hero_attack(self, by):
         if by == "spell":
             if self.hero.spell != None:
                 ran = self.hero.spell.cast_range
-                if self.check_for_enemy(ran):
+                if check_for_enemy(self.dungeon_map, self.x, self.y, ran):
                     enemy = Enemy(health=100, mana=100, damage=20)
                     f = Fight(self.hero, enemy)
                     start_fight()
@@ -176,9 +130,9 @@ class Dungeon():
                 print(f"You can\'t attack, because you don\'t know any spells.")
         if by == "weapon":
             if self.hero.weapon != None:
-                if self.check_for_enemy(1):
+                if self.check_for_enemy(self.dungeon_map, self.x, self.y, 1):
                     enemy = Enemy(health=100, mana=100, damage=20)
-                if self.check_for_enemy(0):
+                if self.check_for_enemy(self.dungeon_map, self.x, self.y, 1):
                     enemy = Enemy(health=100, mana=100, damage=20.0)
                     f = Fight(self.hero, enemy)
                     start_fight()
