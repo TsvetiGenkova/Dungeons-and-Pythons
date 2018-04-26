@@ -139,9 +139,14 @@ class Dungeon():
         if self.dungeon_map[x][y] == "T":
             return f"Found {self.pick_treasure()}!"
         elif self.dungeon_map[x][y] == "E":
-            enemy = Enemy(health=100, mana=100, damage=20.0)
-            f = Fight(self.hero, enemy)
-            start_fight()
+            dun = self.dungeon_map
+            for i in self.enemyes:
+                if i[0][0] == x and i[0][1] == y:
+                    enemy_coords = i
+                    enemy = i[1]
+                    break
+            f = Fight(self.hero, enemy, enemy_coords, dun)
+            f.start_fight()
         elif self.dungeon_map[x][y] == ".":
             pass
         elif self.dungeon_map[x][y] == "S":
@@ -156,7 +161,6 @@ class Dungeon():
                     self.dungeon_map[self.x][self.y + i] == "E" or
                     self.dungeon_map[self.x][self.y - i] == "E"):
                 return True
-
         return False
 
     def hero_attack(self, by):
@@ -171,6 +175,8 @@ class Dungeon():
                 print(f"You can\'t attack, because you don\'t know any spells.")
         if by == "weapon":
             if self.hero.weapon != None:
+                if self.check_for_enemy(1):
+                    enemy = Enemy(health=100, mana=100, damage=20)
                 if self.check_for_enemy(0):
                     enemy = Enemy(health=100, mana=100, damage=20.0)
                     f = Fight(self.hero, enemy)
@@ -178,16 +184,3 @@ class Dungeon():
             else:
                 print(f"You can\'t attack, because you don\'t have a weapon.")
 
-
-d = Dungeon('map.txt')
-d.spawn(Hero(name='dasda', title='dadasd', health=100,
-             mana=100, mana_regeneration_rate=2))
-d.print_map()
-d.move_hero('right')
-d.move_hero("down")
-d.move_hero("down")
-d.move_hero("down")
-d.move_hero("down")
-d.move_hero('right')
-print()
-d.print_map()

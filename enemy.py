@@ -79,9 +79,3 @@ class Enemy(Person):
             return True
         return False
 
-
-# enemy = Enemy(health=50, mana=56, damage=50)
-# enemy.learn(Spell(name='light', damage=52,
-#                   mana_cost=23, cast_range=2))
-
-# print(enemy.attack(by='spell'))
