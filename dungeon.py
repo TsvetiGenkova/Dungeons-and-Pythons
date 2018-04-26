@@ -9,8 +9,7 @@ from utils import Move
 from utils import check_for_enemy
 
 
-
-class Dungeon(Move, CheckSurroundings):
+class Dungeon(Move):
 
     def __init__(self, map_file):
         assert type(map_file) is str, 'map_file must be string'
@@ -67,7 +66,15 @@ class Dungeon(Move, CheckSurroundings):
             print(''.join(i))
 
     def move_hero(self, direction):
-        Dungeon.move(self.dungeon_map, self.x, self.y, direction)
+        changes = Dungeon.move(self.dungeon_map, self.x, self.y, direction)
+        if changes == False:
+            return False
+        self.x = changes[0]
+        self.y = changes[1]
+        self.dungeon_map = changes[2]
+        if (self.x,self.y) is self.get_all_trasure_cordinates():
+            self.pick_treasure()
+        return True
 
     def pick_treasure(self):
         t = []
@@ -117,7 +124,6 @@ class Dungeon(Move, CheckSurroundings):
         elif self.dungeon_map[x][y] == "G":
             print("You have cleared the dungeon!")
 
-
     def hero_attack(self, by):
         if by == "spell":
             if self.hero.spell != None:
@@ -139,16 +145,20 @@ class Dungeon(Move, CheckSurroundings):
             else:
                 print(f"You can\'t attack, because you don\'t have a weapon.")
 
-
+    def get_all_trasure_cordinates(self):
+        trasures = []
+        for index, value in enumerate(self.dungeon_map):
+            for y_index, y_value in enumerate(value):
+                if y_value == 'S':
+                    trasures.append([(index, y_index), False])
+        return trasures
 
 
 d = Dungeon('map.txt')
-d.spawn(Hero(name='ivan', title='ivanov', health=100, mana=100, mana_regeneration_rate=2))
+d.spawn(Hero(name='ivan', title='ivanov', health=100,
+             mana=100, mana_regeneration_rate=2))
 
 d.move_hero('right')
 d.move_hero('down')
 d.move_hero('down')
-d.move_hero('down')
-d.print_map()
-d.move_hero('right')
 d.print_map()

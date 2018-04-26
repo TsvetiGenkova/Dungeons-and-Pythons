@@ -3,6 +3,7 @@ from enemy import Enemy
 from utils import Move
 from utils import check_for_enemy
 
+
 class Fight(Hero, Enemy, Move):
     def __init__(self, hero, enemy, enemy_coords, dun):
         assert isinstance(hero, Hero), 'Hero must be instance of Hero class.'
@@ -31,21 +32,25 @@ class Fight(Hero, Enemy, Move):
     def move_enemy(self):
         if self.distance()[0] == 0:
             if self.distance()[1] < 0:
-                #move left
-                Fight.move(self.dungeon, self.enemy_coords[0], self.enemy_coords[1], "left")
+                # move left
+                Fight.move(
+                    self.dungeon, self.enemy_coords[0], self.enemy_coords[1], "left")
                 print(f"The enemy has moved one square to the left in order to get to the hero. This is his move.")
             else:
-                #move right
-                Fight.move(instance, self.dungeon, self.enemy_coords[0], self.enemy_coords[1], "right")
+                # move right
+                Fight.move(instance, self.dungeon,
+                           self.enemy_coords[0], self.enemy_coords[1], "right")
                 print(f"The enemy has moved one square to the right in order to get to the hero. This is his move.")
         elif self.distance()[1] == 0:
             if self.distance()[0] < 0:
-                #move up
-                Fight.move(instance, self.dungeon, self.enemy_coords[0], self.enemy_coords[1], "up")
+                # move up
+                Fight.move(instance, self.dungeon,
+                           self.enemy_coords[0], self.enemy_coords[1], "up")
                 print(f"The enemy has moved one square up in order to get to the hero. This is his move.")
             else:
-                #move down
-                Fight.move(instance, self.dungeon, self.enemy_coords[0], self.enemy_coords[1], "down")
+                # move down
+                Fight.move(instance, self.dungeon,
+                           self.enemy_coords[0], self.enemy_coords[1], "down")
                 print(f"The enemy has moved one square down in order to get to the hero. This is his move.")
 
         return self.dungeon
