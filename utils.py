@@ -28,9 +28,9 @@ class Move():
             or direction == 'left' or direction == 'right',\
             'Direction must be up,down, left or right'
         
-        if cls.__name__ == "Hero":
+        if cls.__name__ == "Dungeon":
             abrv = "H"
-        elif cls.__name__ == "Enemy":
+        elif cls.__name__ == "Fight":
             abrv = "E"
 
 
