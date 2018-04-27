@@ -8,8 +8,6 @@ from weapon_and_spells import Weapon
 from utils import Move
 from utils import check_for_enemy
 
-
-
 class Dungeon(Move):
 
     def __init__(self, map_file):
@@ -18,6 +16,7 @@ class Dungeon(Move):
         self.map_file = map_file
         self.dungeon_map = self.load_map()
         self.spawning_cordinates = self.get_all_spawning_cordinates()
+        self.treasure_cordinates = self.get_all_trasure_cordinates()
         self.hero = None
         self.enemyes = self.get_enemys()
         self.x = None
@@ -67,7 +66,17 @@ class Dungeon(Move):
             print(''.join(i))
 
     def move_hero(self, direction):
-        Dungeon.move(self.dungeon_map, self.x, self.y, direction)
+        changes = Dungeon.move(self.dungeon_map, self.x, self.y, direction)
+        if changes == False:
+            return False
+        self.x = changes[0]
+        self.y = changes[1]
+        self.dungeon_map = changes[2]
+        if (self.x, self.y) in self.treasure_cordinates:
+            self.treasure_cordinates.remove((self.x, self.y))
+            mesege = self.pick_treasure()
+            print(f'found {mesege}')
+        return True
 
     def pick_treasure(self):
         t = []
@@ -91,51 +100,67 @@ class Dungeon(Move):
         else:
             if treasure[0] == "Mana potion":
                 self.hero.take_mana(int(treasure[1]))
-                tr = "Mana potion"
+                tr = f"Mana potion = {int(treasure[1])} mana"
             elif treasure[0] == "Health potion":
                 self.hero.take_healing(int(treasure[1]))
-                tr = "Health potion"
+                tr = f"Health potion {int(treasure[1])} health"
 
         return tr
-
-    def where_are_you(self, x, y):
-        if self.dungeon_map[x][y] == "T":
-            return f"Found {self.pick_treasure()}!"
-        elif self.dungeon_map[x][y] == "E":
-            dun = self.dungeon_map
-            for i in self.enemyes:
-                if i[0][0] == x and i[0][1] == y:
-                    enemy_coords = i[0]
-                    enemy = i[1]
-                    break
-            f = Fight(self.hero, enemy, enemy_coords, dun)
-            f.start_fight()
-        elif self.dungeon_map[x][y] == ".":
-            pass
-        elif self.dungeon_map[x][y] == "S":
-            pass
-        elif self.dungeon_map[x][y] == "G":
-            print("You have cleared the dungeon!")
-
 
     def hero_attack(self, by):
         if by == "spell":
             if self.hero.spell != None:
                 ran = self.hero.spell.cast_range
-                if check_for_enemy(self.dungeon_map, self.x, self.y, ran):
+                if check_for_enemy(self.x, self.y, ran):
                     enemy = Enemy(health=100, mana=100, damage=20)
                     f = Fight(self.hero, enemy)
                     start_fight()
+                    return True
+                else:
+                    return False
             else:
                 print(f"You can\'t attack, because you don\'t know any spells.")
         if by == "weapon":
             if self.hero.weapon != None:
-                if self.check_for_enemy(self.dungeon_map, self.x, self.y, 1):
-                    enemy = Enemy(health=100, mana=100, damage=20)
-                if self.check_for_enemy(self.dungeon_map, self.x, self.y, 1):
+                enemy_coords_in_range = self.check_for_enemy_in_range(1)
+                if enemy_coords_in_range != None:
                     enemy = Enemy(health=100, mana=100, damage=20.0)
-                    f = Fight(self.hero, enemy)
-                    start_fight()
+                    f = Fight(self.hero, enemy, enemy_coords_in_range, self.dungeon_map)
+                    f.start_fight()
+                    return True
+                else:
+                    return False
             else:
                 print(f"You can\'t attack, because you don\'t have a weapon.")
+                return False
 
+    def get_all_trasure_cordinates(self):
+        trasures = []
+        for index, value in enumerate(self.dungeon_map):
+            for y_index, y_value in enumerate(value):
+                if y_value == 'T':
+                    trasures.append((index, y_index))
+        return trasures
+
+    def check_for_enemy_in_range(self, ran):
+        for i in range(0, ran+1):
+            if self.dungeon_map[self.x + i][self.y] == "E":
+                return (self.x + i, self.y)
+            if self.dungeon_map[self.x - i][self.y] == "E":
+                return (self.x - i, self.y)
+            if self.dungeon_map[self.x][self.y + i] == "E":
+                return (self.x, self.y + i)
+            if self.dungeon_map[self.x][self.y - i] == "E":
+                return (self.x, self.y - i)
+        return None
+
+
+d = Dungeon('map.txt')
+h = Hero(name='ivan', title='ivanov', health=100,
+         mana=100, mana_regeneration_rate=2)
+
+h.equip(Weapon(name='ubiec', damage=32.0))
+d.spawn(h)
+d.print_map()
+result = d.hero_attack(by='weapon')
+print(result)

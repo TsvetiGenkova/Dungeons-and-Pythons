@@ -4,9 +4,10 @@ from Person import Person
 
 from weapon_and_spells import Weapon
 from weapon_and_spells import Spell
+from utils import Move
 
 
-class Enemy(Person):
+class Enemy(Person,Move):
 
     def __init__(self, health, mana, damage):
         assert type(health) is int, 'health is not int'
