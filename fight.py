@@ -137,7 +137,6 @@ class Fight(Hero, Enemy, Move):
             self.hero_fight()
             self.enemy_fight()
             self.hero.take_mana(self.hero.mana_regeneration_rate)
-            print('DSADAS')
         if self.hero.is_alive() == False:
             print("Your hero is dead!")
         elif self.enemy.is_alive() == False:

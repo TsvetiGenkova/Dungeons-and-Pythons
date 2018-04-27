@@ -112,7 +112,7 @@ class Dungeon(Move):
         if by == "spell":
             if self.hero.spell != None:
                 ran = self.hero.spell.cast_range
-                if check_for_enemy(self.dungeon_map, self.x, self.y, ran):
+                if check_for_enemy(self.x, self.y, ran):
                     enemy = Enemy(health=100, mana=100, damage=20)
                     f = Fight(self.hero, enemy)
                     start_fight()
@@ -123,10 +123,10 @@ class Dungeon(Move):
                 print(f"You can\'t attack, because you don\'t know any spells.")
         if by == "weapon":
             if self.hero.weapon != None:
-                if self.check_for_enemy(self.dungeon_map, self.x, self.y, 1):
+                enemy_coords_in_range = self.check_for_enemy_in_range(1)
+                if enemy_coords_in_range != None:
                     enemy = Enemy(health=100, mana=100, damage=20.0)
-                    ##find a way to get enemy cords
-                    f = Fight(self.hero, enemy)
+                    f = Fight(self.hero, enemy, enemy_coords_in_range, self.dungeon_map)
                     f.start_fight()
                     return True
                 else:
@@ -143,24 +143,17 @@ class Dungeon(Move):
                     trasures.append((index, y_index))
         return trasures
 
-    def check_for_enemy(self, dungeon_map, x, y, ran):
-        if ran == 1:
-            return (dungeon_map[x + 1][y] == "E" or
-                    dungeon_map[x - 1][y] == "E" or
-                    dungeon_map[x][y + 1] == "E" or
-                    dungeon_map[x][y - 1] == "E")
-        for i in range(1, ran):
-            if (dungeon_map[x + i][y] == "E" or
-                    dungeon_map[x - i][y] == "E" or
-                    dungeon_map[x][y + i] == "E" or
-                    dungeon_map[x][y - i] == "E"):
-                return True
-        return False
-
-
-    def get_closest_enemy(self):
-        pass
-        
+    def check_for_enemy_in_range(self, ran):
+        for i in range(0, ran+1):
+            if self.dungeon_map[self.x + i][self.y] == "E":
+                return (self.x + i, self.y)
+            if self.dungeon_map[self.x - i][self.y] == "E":
+                return (self.x - i, self.y)
+            if self.dungeon_map[self.x][self.y + i] == "E":
+                return (self.x, self.y + i)
+            if self.dungeon_map[self.x][self.y - i] == "E":
+                return (self.x, self.y - i)
+        return None
 
 
 d = Dungeon('map.txt')
