@@ -1,7 +1,7 @@
 from hero import Hero
 from enemy import Enemy
 from utils import Move
-from utils import check_for_enemy
+from utils import check_enemy
 
 
 class Fight(Hero, Enemy, Move):
@@ -31,18 +31,18 @@ class Fight(Hero, Enemy, Move):
 
     def move_enemy(self):
         if self.distance()[0] == 0:
-            if self.distance()[1] < 0:
+            if (self.distance()[1] * (-1)) >= 1:
                 # move left
-                Enemy.move(
-                    self.dungeon, self.enemy_coords[0], self.enemy_coords[1], "left")
+                Enemy.move(self.dungeon,
+                           self.enemy_coords[0], self.enemy_coords[1], "right")
                 print(f"The enemy has moved one square to the left in order to get to the hero. This is his move.")
             else:
                 # move right
-                Enemy.move(instance, self.dungeon,
+                Enemy.move(self.dungeon,
                            self.enemy_coords[0], self.enemy_coords[1], "right")
                 print(f"The enemy has moved one square to the right in order to get to the hero. This is his move.")
         elif self.distance()[1] == 0:
-            if self.distance()[0] < 0:
+            if (self.distance()[0] * (-1)) >= 1:
                 # move up
                 Enemy.move(instance, self.dungeon,
                            self.enemy_coords[0], self.enemy_coords[1], "up")
@@ -86,50 +86,19 @@ class Fight(Hero, Enemy, Move):
                 "Noooooo. Your hero don\'t have weapon and can\'t casts a spell. Looks like he is doomed!")
 
     def enemy_fight(self):
-        if not self.check_enemy(1):
-            if self.enemy.spell == None:
-                self.move_enemy()
-            elif self.enemy.spell != None and not self.check_enemy(self.enemy.spell.cast_range):
-                self.move_enemy()
-            elif self.enemy.spell != None and self.check_enemy(self.enemy.spell.cast_range) and not self.enemy.can_cast():
-                self.move_enemy()
-            elif self.enemy.spell != None and self.check_enemy(self.enemy.spell.cast_range) and self.enemy.can_cast():
-                self.hero.take_damage(self.enemy.attack(by="spell"))
-                print(f"Enemy hits hero with {self.enemy.spell.name} for {self.enemy.spell.damage} dmg. Hero health is {self.hero.health}.")
+        if self.enemy.spell != None and check_for_enemy(self.dungeon, self.enemy_coords[0], self.enemy_coords[1], self.enemy.spell.cast_range, 'H') and self.enemy.can_cast() == True:
+            print(f'Enemy attack with spell')
+            self.hero.take_damage(self.enemy.attack(by='spell'))
 
-        elif self.check_enemy(1):
-            if self.enemy.spell != None and self.enemy.weapon != None:
-                spell_damage = self.enemy.spell.damage
-                weapon_damage = self.enemy.weapon.damage
-                enemy_damage = self.enemy.damage
+        elif self.enemy.weapon != None and check_enemy(self.dungeon, self.enemy_coords[0], self.enemy_coords[1], 1, 'H'):
+            print(f'Enemy attack with weapon ')
+            self.hero.take_damage(self.enemy.attack(by='weapon'))
+        elif check_enemy(self.dungeon, self.enemy_coords[0], self.enemy_coords[1], 1, 'H'):
+            print(f'Enemy attack with hands hero takes {self.enemy.attack(by=None)}')
+            self.hero.take_damage(self.enemy.damage)
 
-                if not self.enemy.can_cast():
-                    ls = [weapon_damage, enemy_damage]
-                else:
-                    ls = [spell_damage, weapon_damage, enemy_damage]
-                ls.sort(reverse=True)
-
-                if ls[0] == self.enemy.spell.damage:
-                    self.hero.take_damage(self.enemy.attack(by="spell"))
-                    print(f"Enemy hits hero with {self.enemy.spell.name} for {self.enemy.spell.damage} dmg. Hero health is {self.hero.health}.")
-                elif ls[0] == self.enemy.weapon.damage:
-                    self.hero.take_damage(self.enemy.attack(by="weapon"))
-                    print(f"Enemy hits hero for {self.enemy.weapon.damage} dmg. Hero health is {self.hero.health}.")
-                elif ls[0] == self.enemy.damage:
-                    self.hero.take_damage(self.enemy.damage)
-                    print(f"Enemy hits hero for {self.enemy.damage} dmg. Hero health is {self.hero.health}.")
-
-            elif self.enemy.spell == None and self.enemy.weapon != None:
-                if self.enemy.weapon.damage > self.enemy.damage:
-                    self.hero.take_damage(self.enemy.attack(by="weapon"))
-                    print(f"Enemy hits hero for {self.enemy.weapon.damage} dmg. Hero health is {self.hero.health}.")
-                else:
-                    self.hero.take_damage(self.enemy.damage)
-                    print(f"Enemy hits hero for {self.enemy.damage} dmg. Hero health is {self.hero.health}.")
-
-            elif self.enemy.spell == None and self.enemy.weapon == None:
-                self.hero.take_damage(self.enemy.damage)
-                print(f"Enemy hits hero for {self.enemy.damage} dmg. Hero health is {self.hero.health}.")
+        else:
+            self.move_enemy()
 
     def start_fight(self):
         print(f"A fight is started between our {self.hero} and {self.enemy}")
@@ -138,6 +107,8 @@ class Fight(Hero, Enemy, Move):
             self.enemy_fight()
             self.hero.take_mana(self.hero.mana_regeneration_rate)
         if self.hero.is_alive() == False:
+            self.dungeon[self.hero_coord[0]][self.hero_coord[1]] = '.'
             print("Your hero is dead!")
         elif self.enemy.is_alive() == False:
+            self.dungeon[self.enemy_coords[0]][self.enemy_coords[1]] = '.'
             print("The enemy is dead!")

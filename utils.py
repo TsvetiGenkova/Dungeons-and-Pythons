@@ -1,9 +1,9 @@
-def check_for_enemy(dungeon_map, x, y, ran):
-    for i in range(1, ran):
-        if (dungeon_map[x + i][y] == "E" or
-                dungeon_map[x - i][y] == "E" or
-                dungeon_map[x][y + i] == "E" or
-                dungeon_map[x][y - i] == "E"):
+def check_enemy(dungeon_map, x, y, ran,type_of_enemy):
+    for i in range(0, ran+1):
+        if (dungeon_map[x + i][y] == type_of_enemy or
+                dungeon_map[x - i][y] == type_of_enemy or
+                dungeon_map[x][y + i] == type_of_enemy or
+                dungeon_map[x][y - i] == type_of_enemy):
             return True
     return False
 

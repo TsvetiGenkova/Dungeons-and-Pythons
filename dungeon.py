@@ -6,7 +6,7 @@ from random import randint
 from weapon_and_spells import Spell
 from weapon_and_spells import Weapon
 from utils import Move
-from utils import check_for_enemy
+from utils import check_enemy
 
 
 class Dungeon(Move):
@@ -164,4 +164,6 @@ h.equip(Weapon(name='ubiec', damage=32.0))
 d.spawn(h)
 d.print_map()
 result = d.hero_attack(by='weapon')
+d.print_map()
 print(result)
+print(d.hero.health)
