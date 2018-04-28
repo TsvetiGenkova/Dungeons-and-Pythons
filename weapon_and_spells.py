@@ -1,6 +1,6 @@
 class Weapon():
     def __init__(self, name, damage):
-        assert type(damage) is float, 'damage must be float'
+        assert type(damage) is float or type(damage) is int, 'damage must be number'
         self.name = name
         self.damage = damage
 
@@ -9,7 +9,6 @@ class Weapon():
 
     def get_damage(self):
         return self.damage
-
 
     def __str__(self):
         return f' Weapon {self.name} damage = {self.damage}'

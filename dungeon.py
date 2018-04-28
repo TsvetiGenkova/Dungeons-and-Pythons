@@ -2,11 +2,11 @@ import os
 from fight import Fight
 from hero import Hero
 from enemy import Enemy
-from random import randint
+import random
 from weapon_and_spells import Spell
 from weapon_and_spells import Weapon
 from utils import Move
-from utils import check_for_enemy
+from utils import check_for_stuff
 
 class Dungeon(Move):
 
@@ -16,11 +16,18 @@ class Dungeon(Move):
         self.map_file = map_file
         self.dungeon_map = self.load_map()
         self.spawning_cordinates = self.get_all_spawning_cordinates()
-        self.treasure_cordinates = self.get_all_trasure_cordinates()
         self.hero = None
-        self.enemyes = self.get_enemys()
         self.x = None
         self.y = None
+        self.cleared = False
+
+    def get_all_spawning_cordinates(self):
+        spawning_cordinates = []
+        for index, value in enumerate(self.dungeon_map):
+            for y_index, y_value in enumerate(value):
+                if y_value == 'S':
+                    spawning_cordinates.append([(index, y_index), False])
+        return spawning_cordinates
 
     def spawn(self, hero):
         assert isinstance(hero, Hero), 'Hero must be instance of Hero class '
@@ -33,25 +40,6 @@ class Dungeon(Move):
                 self.hero = hero
                 return True
         return False
-
-    def get_all_spawning_cordinates(self):
-        spawning_cordinates = []
-        for index, value in enumerate(self.dungeon_map):
-            for y_index, y_value in enumerate(value):
-                if y_value == 'S':
-                    spawning_cordinates.append([(index, y_index), False])
-        return spawning_cordinates
-
-    def get_enemys(self):
-        enemyes = []
-        for index, value in enumerate(self.dungeon_map):
-            for y_index, y_value in enumerate(value):
-                if y_value == 'E':
-                    enemyes.append([(index, y_index), self.generate_enemy()])
-        return enemyes
-
-    def generate_enemy(self):
-        return Enemy(health=55, mana=55, damage=55.0)
 
     def load_map(self):
         m = []
@@ -66,101 +54,45 @@ class Dungeon(Move):
             print(''.join(i))
 
     def move_hero(self, direction):
-        changes = Dungeon.move(self.dungeon_map, self.x, self.y, direction)
-        if changes == False:
-            return False
-        self.x = changes[0]
-        self.y = changes[1]
-        self.dungeon_map = changes[2]
-        if (self.x, self.y) in self.treasure_cordinates:
-            self.treasure_cordinates.remove((self.x, self.y))
-            mesege = self.pick_treasure()
-            print(f'found {mesege}')
-        return True
-
-    def pick_treasure(self):
-        t = []
-        with open("loot.txt", 'r') as f:
-            for i in f.readlines():
-                t.append(i)
-        treasure = t[randint(0, len(t) - 1)].split(",")
-        if treasure[0] == "weapon":
-            tmp = float(treasure[2]) if '.' in treasure[2] else float(
-                treasure[2])
-            tr = Weapon(name=treasure[1], damage=tmp)
-            self.hero.equip(tr)
-        elif treasure[0] == "spell":
-            tmp = float(treasure[2]) if '.' in treasure[2] else float(
-                treasure[2])
-            tmp1 = float(treasure[3]) if '.' in treasure[3] else float(
-                treasure[3])
-            tr = Spell(name=treasure[1], damage=tmp,
-                       mana_cost=tmp1, cast_range=int(treasure[4]))
-            self.hero.learn(tr)
+        m = Move(self.hero)
+        tmp = m.move(self.dungeon_map, self.x, self.y, direction)
+        if m.cleared:
+            self.cleared == True
+        if tmp:
+            self.x = tmp[0]
+            self.y = tmp[1]
+            self.print_map()
         else:
-            if treasure[0] == "Mana potion":
-                self.hero.take_mana(int(treasure[1]))
-                tr = f"Mana potion = {int(treasure[1])} mana"
-            elif treasure[0] == "Health potion":
-                self.hero.take_healing(int(treasure[1]))
-                tr = f"Health potion {int(treasure[1])} health"
+            if not self.hero.is_alive():
+                des  = input("Do you want to respawn? (y/n) ")
+                if des == "y":
+                    self.hero.health = self.hero.max_health
+                    self.hero.mana = self.hero.max_mana
+                    self.spawn(self.hero)
+                    self.print_map()
+                else:
+                    pass
+            dir = input("You can\'t move that way! Pick another direction! ")
+            self.move_hero(dir)
 
-        return tr
 
     def hero_attack(self, by):
         if by == "spell":
-            if self.hero.spell != None:
-                ran = self.hero.spell.cast_range
-                if check_for_enemy(self.x, self.y, ran):
-                    enemy = Enemy(health=100, mana=100, damage=20)
-                    f = Fight(self.hero, enemy)
-                    start_fight()
+            if self.hero.can_cast():
+                ran = self.hero.spell.get_cast_range()
+                if check_for_stuff(self.dungeon_map, self.x, self.y, "E", ran):
                     return True
                 else:
                     return False
             else:
-                print(f"You can\'t attack, because you don\'t know any spells.")
+                return False
+                print(f"You can\'t attack, because you don\'t know any spells or don\'t have mana.")
         if by == "weapon":
             if self.hero.weapon != None:
-                enemy_coords_in_range = self.check_for_enemy_in_range(1)
-                if enemy_coords_in_range != None:
-                    enemy = Enemy(health=100, mana=100, damage=20.0)
-                    f = Fight(self.hero, enemy, enemy_coords_in_range, self.dungeon_map)
-                    f.start_fight()
+                if check_for_stuff(self.dungeon_map, self.x, self.y, "E", 1):
                     return True
                 else:
                     return False
             else:
                 print(f"You can\'t attack, because you don\'t have a weapon.")
                 return False
-
-    def get_all_trasure_cordinates(self):
-        trasures = []
-        for index, value in enumerate(self.dungeon_map):
-            for y_index, y_value in enumerate(value):
-                if y_value == 'T':
-                    trasures.append((index, y_index))
-        return trasures
-
-    def check_for_enemy_in_range(self, ran):
-        for i in range(0, ran+1):
-            if self.dungeon_map[self.x + i][self.y] == "E":
-                return (self.x + i, self.y)
-            if self.dungeon_map[self.x - i][self.y] == "E":
-                return (self.x - i, self.y)
-            if self.dungeon_map[self.x][self.y + i] == "E":
-                return (self.x, self.y + i)
-            if self.dungeon_map[self.x][self.y - i] == "E":
-                return (self.x, self.y - i)
-        return None
-
-
-d = Dungeon('map.txt')
-h = Hero(name='ivan', title='ivanov', health=100,
-         mana=100, mana_regeneration_rate=2)
-
-h.equip(Weapon(name='ubiec', damage=32.0))
-d.spawn(h)
-d.print_map()
-result = d.hero_attack(by='weapon')
-print(result)
