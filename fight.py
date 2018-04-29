@@ -36,20 +36,20 @@ class Fight(Hero, Enemy, Move):
     def chech_for_wall(self):
         if (self.hero_coord[0] - self.enemy_coords[0]) == 0 and self.hero_coord[1] - self.enemy_coords[1] < 0:
             for i in range(abs(self.hero_coord[1] - self.enemy_coords[1])):
-                if self.dungeon[self.hero_coord[0]][self.hero_coord[1]+i] == '#':
+                if self.dungeon[self.hero_coord[0]][self.hero_coord[1] + i] == '#':
                     return True
         if (self.hero_coord[0] - self.enemy_coords[0]) == 0 and self.hero_coord[1] - self.enemy_coords[1] > 0:
             for i in range(abs(self.hero_coord[1] - self.enemy_coords[1])):
-                if self.dungeon[self.hero_coord[0]][self.hero_coord[1]-i] == '#':
+                if self.dungeon[self.hero_coord[0]][self.hero_coord[1] - i] == '#':
                     return True
- 
-        if self.hero_coord[0] - self.enemy_coords[0] > 0 and self.hero_coord[1] - self.enemy_coords[1] == 0:        
+
+        if self.hero_coord[0] - self.enemy_coords[0] > 0 and self.hero_coord[1] - self.enemy_coords[1] == 0:
             for i in range(abs(self.hero_coord[0] - self.enemy_coords[0])):
-                if self.dungeon[self.hero_coord[0]+i][self.hero_coord[y]] == '#':
+                if self.dungeon[self.hero_coord[0] - i][self.hero_coord[y]] == '#':
                     return True
-        if self.hero_coord[0] - self.enemy_coords[0] < 0 and self.hero_coord[1] - self.enemy_coords[1] == 0:        
+        if self.hero_coord[0] - self.enemy_coords[0] < 0 and self.hero_coord[1] - self.enemy_coords[1] == 0:
             for i in range(abs(self.hero_coord[0] - self.enemy_coords[0])):
-                if self.dungeon[self.hero_coord[0]-i][self.hero_coord[y]] == '#':
+                if self.dungeon[self.hero_coord[0] + i][self.hero_coord[y]] == '#':
                     return True
         return False
 
@@ -57,30 +57,34 @@ class Fight(Hero, Enemy, Move):
         m = Move(self.enemy)
         if self.distance()[0] == 0:
             if self.distance()[1] < 0:
-                tmp = m.move(self.dungeon, self.enemy_coords[0], self.enemy_coords[1], "left")
+                tmp = m.move(
+                    self.dungeon, self.enemy_coords[0], self.enemy_coords[1], "left")
                 if tmp:
-                    self.enemy_coords = (tmp[0],tmp[1])
+                    self.enemy_coords = (tmp[0], tmp[1])
                     self.dungeon = tmp[2]
                     print(f"The enemy has moved one square to the left in order to get to the hero. This is his move.")
                 else:
                     pass
             else:
-                tmp = m.move(self.dungeon, self.enemy_coords[0], self.enemy_coords[1], "right")
+                tmp = m.move(
+                    self.dungeon, self.enemy_coords[0], self.enemy_coords[1], "right")
                 if tmp:
-                    self.enemy_coords = (tmp[0],tmp[1])
+                    self.enemy_coords = (tmp[0], tmp[1])
                     self.dungeon = tmp[2]
                     print(f"The enemy has moved one square to the right in order to get to the hero. This is his move.")
                 else:
                     pass
         elif self.distance()[1] == 0:
             if self.distance()[0] < 0:
-                tmp = m.move(self.dungeon, self.enemy_coords[0], self.enemy_coords[1], "up")
-                self.enemy_coords = (tmp[0],tmp[1])
+                tmp = m.move(
+                    self.dungeon, self.enemy_coords[0], self.enemy_coords[1], "up")
+                self.enemy_coords = (tmp[0], tmp[1])
                 self.dungeon = tmp[2]
                 print(f"The enemy has moved one square up in order to get to the hero. This is his move.")
             else:
-                tmp = m.move(self.dungeon, self.enemy_coords[0], self.enemy_coords[1], "down")
-                self.enemy_coords = (tmp[0],tmp[1])
+                tmp = m.move(
+                    self.dungeon, self.enemy_coords[0], self.enemy_coords[1], "down")
+                self.enemy_coords = (tmp[0], tmp[1])
                 self.dungeon = tmp[2]
                 print(f"The enemy has moved one square down in order to get to the hero. This is his move.")
 
@@ -108,8 +112,6 @@ class Fight(Hero, Enemy, Move):
             print(f"Hero casts {self.hero.spell.name} for {self.hero.spell.damage} damage. Enemy health is: {self.enemy.get_health()}")
         elif not self.hero.can_cast() and self.hero.weapon == None and not self.hero.can_cast():
             print("Noooooo. Your hero don\'t have a weapon. Looks like he is doomed!")
-
-
 
     def enemy_fight(self):
         if not check_for_stuff(self.dungeon, self.enemy_coords[0], self.enemy_coords[1], "H", 1):
@@ -157,7 +159,8 @@ class Fight(Hero, Enemy, Move):
 
     def start_fight(self):
         if self.chech_for_wall():
-            print("There is a wall between your hero and the enemy you can\'t start a fight.")
+            print(
+                "There is a wall between your hero and the enemy you can\'t start a fight.")
             return
         print(f"A fight is started between our {self.hero} and {self.enemy}")
 
@@ -175,6 +178,3 @@ class Fight(Hero, Enemy, Move):
                 print("Your hero is dead!")
                 break
             self.hero.take_mana(self.hero.mana_regeneration_rate)
-        
-        
-
