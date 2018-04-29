@@ -7,8 +7,8 @@ from weapon_and_spells import Weapon
 
 
 def check_for_stuff(dungeon_map, x, y, stuff, ran):
-    assert type(x) is int and x > 0, 'X must be integer and positive'
-    assert type(y) is int and y > 0, 'Y must be integer and positive'
+    assert type(x) is int and x >=0, 'X must be integer and positive'
+    assert type(y) is int and y >= 0, 'Y must be integer and positive'
     assert type(ran) is int, 'ran must be integer'
     assert ran > 0, 'ran must be positive'
     assert type(stuff) is str, 'Stuff must be string'
@@ -98,6 +98,7 @@ class Move():
             return False
 
     def move_util(self, abrv, dungeon_map, curr_x, curr_y, x, y):
+        
         if dungeon_map[curr_x + x][curr_y + y] == ".":
             pass
         elif dungeon_map[curr_x + x][curr_y + y] == "S":
