@@ -33,6 +33,26 @@ class Fight(Hero, Enemy, Move):
     def distance(self):
         return (self.hero_coord[0] - self.enemy_coords[0], self.hero_coord[1] - self.enemy_coords[1])
 
+    def chech_for_wall(self):
+        if (self.hero_coord[0] - self.enemy_coords[0]) == 0 and self.hero_coord[1] - self.enemy_coords[1] < 0:
+            for i in range(abs(self.hero_coord[1] - self.enemy_coords[1])):
+                if self.dungeon[self.hero_coord[0]][self.hero_coord[1]+i] == '#':
+                    return True
+        if (self.hero_coord[0] - self.enemy_coords[0]) == 0 and self.hero_coord[1] - self.enemy_coords[1] > 0:
+            for i in range(abs(self.hero_coord[1] - self.enemy_coords[1])):
+                if self.dungeon[self.hero_coord[0]][self.hero_coord[1]-i] == '#':
+                    return True
+ 
+        if self.hero_coord[0] - self.enemy_coords[0] > 0 and self.hero_coord[1] - self.enemy_coords[1] == 0:        
+            for i in range(abs(self.hero_coord[0] - self.enemy_coords[0])):
+                if self.dungeon[self.hero_coord[0]+i][self.hero_coord[y]] == '#':
+                    return True
+        if self.hero_coord[0] - self.enemy_coords[0] < 0 and self.hero_coord[1] - self.enemy_coords[1] == 0:        
+            for i in range(abs(self.hero_coord[0] - self.enemy_coords[0])):
+                if self.dungeon[self.hero_coord[0]-i][self.hero_coord[y]] == '#':
+                    return True
+        return False
+
     def move_enemy(self):
         m = Move(self.enemy)
         if self.distance()[0] == 0:
@@ -136,6 +156,9 @@ class Fight(Hero, Enemy, Move):
                 print(f"Enemy hits hero for {self.enemy.damage} dmg. Hero health is {self.hero.get_health()}.")
 
     def start_fight(self):
+        if self.chech_for_wall():
+            print("There is a wall between your hero and the enemy you can\'t start a fight.")
+            return
         print(f"A fight is started between our {self.hero} and {self.enemy}")
 
         while self.hero.is_alive() != False or self.enemy.is_alive() != False:
