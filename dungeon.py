@@ -8,6 +8,7 @@ from weapon_and_spells import Weapon
 from utils import Move
 from utils import check_for_stuff
 
+
 class Dungeon(Move):
 
     def __init__(self, map_file):
@@ -64,7 +65,7 @@ class Dungeon(Move):
             self.print_map()
         else:
             if not self.hero.is_alive():
-                des  = input("Do you want to respawn? (y/n) ")
+                des = input("Do you want to respawn? (y/n) ")
                 if des == "y":
                     self.hero.health = self.hero.max_health
                     self.hero.mana = self.hero.max_mana
@@ -74,7 +75,6 @@ class Dungeon(Move):
                     pass
             dir = input("You can\'t move that way! Pick another direction! ")
             self.move_hero(dir)
-
 
     def hero_attack(self, by):
         if by == "spell":

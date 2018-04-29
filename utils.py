@@ -7,7 +7,7 @@ from weapon_and_spells import Weapon
 
 
 def check_for_stuff(dungeon_map, x, y, stuff, ran):
-    assert type(x) is int and x >=0, 'X must be integer and positive'
+    assert type(x) is int and x >= 0, 'X must be integer and positive'
     assert type(y) is int and y >= 0, 'Y must be integer and positive'
     assert type(ran) is int, 'ran must be integer'
     assert ran > 0, 'ran must be positive'
@@ -44,6 +44,32 @@ def check_for_stuff(dungeon_map, x, y, stuff, ran):
         except IndexError:
             tmp = False
     return tmp
+
+
+def chech_for_wall(hero_x, hero_y, enemy_x, enemy_y, dungeon_map):
+    assert type(hero_x) is int, 'hero_x must be int'
+    assert type(hero_y) is int, ' hero_y must be int'
+    assert type(enemy_x) is int, 'enemy_x must be int'
+    assert type(enemy_y) is int, ' enemy_y must be int'
+    assert type(dungeon_map) is list, 'dungeon must be list'
+    if (hero_x - enemy_x) == 0 and (hero_y - enemy_y) < 0:
+        for i in range(abs(hero_y - enemy_y)):
+            if dungeon_map[hero_x][hero_y + i] == '#':
+                return True
+    if (hero_x - enemy_x) == 0 and (hero_y - enemy_y) > 0:
+        for i in range(abs(hero_y - enemy_y)):
+            if dungeon_map[hero_x][hero_y - i] == '#':
+                return True
+
+    if (hero_x - enemy_x) > 0 and (hero_y - enemy_y) == 0:
+        for i in range(abs(hero_x - enemy_x)):
+            if dungeon_map[hero_x - i][hero_y] == '#':
+                return True
+    if (hero_x - enemy_x) < 0 and (hero_y - enemy_y) == 0:
+        for i in range(abs(hero_x - enemy_x)):
+            if dungeon_map[hero_x + i][hero_y] == '#':
+                return True
+    return False
 
 
 class Move():
@@ -98,7 +124,7 @@ class Move():
             return False
 
     def move_util(self, abrv, dungeon_map, curr_x, curr_y, x, y):
-        
+
         if dungeon_map[curr_x + x][curr_y + y] == ".":
             pass
         elif dungeon_map[curr_x + x][curr_y + y] == "S":
