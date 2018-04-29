@@ -12,7 +12,7 @@ def main():
     print("The goal of the game is to find the treasures hidden in the dungeon and reach the gateway \'G\'.")
     print("But beware the fierce enemys that you can meet in the dark...\n\n")
     print("First create your hero.")
-    n = input("Give him/her a name: ") 
+    n = input("Give him/her a name: ")
     t = input("And a title: ")
     h = Hero(name=n, title=t)
     print(f"Very well your hero is known as {str(h.known_as())}")
@@ -20,7 +20,7 @@ def main():
     #print("You can equip your hero with weapon or spell before the start or find them in the dungeon")
     m = input(f"\n Now pick a level: ")
     map = f"{m}.txt"
-    #add asserts about the map and names
+    # add asserts about the map and names
     d = Dungeon(map)
     d.spawn(h)
     w = Weapon(name="The Axe of Destiny", damage=20)
@@ -31,18 +31,21 @@ def main():
 
     while d.cleared == False:
         if d.hero_attack(by="spell"):
-            des = input("There is an enemy in the range of your spell. You can start a fight. (y/n) ")
+            des = input(
+                "There is an enemy in the range of your spell. You can start a fight. (y/n) ")
             if des == "y":
                 ran = h.spell.get_cast_range()
                 enemy = Enemy.generate_enemy()
-                enemy_coords = check_for_stuff(d.dungeon_map, d.x, d.y, "E", ran)
+                enemy_coords = check_for_stuff(
+                    d.dungeon_map, d.x, d.y, "E", ran)
                 f = Fight(h, enemy, enemy_coords, d.dungeon_map)
                 f.start_fight()
             elif des == "n":
                 dir = input("Pick direction for your hero to go! ")
                 d.move_hero(dir)
         elif d.hero_attack(by="weapon"):
-            des = input("There is an enemy near you. You can start a fight. (y/n) ")
+            des = input(
+                "There is an enemy near you. You can start a fight. (y/n) ")
             if des == "y":
                 enemy = Enemy.generate_enemy()
                 enemy_coords = check_for_stuff(d.dungeon_map, d.x, d.y, "E", 1)
@@ -51,7 +54,7 @@ def main():
             elif des == "n":
                 dir = input("Pick direction for your hero to go! ")
                 d.move_hero(dir)
-        
+
         if h.is_alive():
             dir = input("Pick direction for your hero to go! ")
             d.move_hero(dir)
@@ -67,7 +70,7 @@ def main():
                     break
             elif inp == "n":
                 break
-    
+
 
 if __name__ == '__main__':
     main()
