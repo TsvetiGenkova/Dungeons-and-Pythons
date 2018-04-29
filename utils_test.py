@@ -41,6 +41,9 @@ class Test(unittest.TestCase):
 
         self.assertFalse(self.mover.move(self.m,3,1,'down'))
 
+    def test_is_safe(self):
+        
+
 
 if __name__ == '__main__':
     unittest.main()
