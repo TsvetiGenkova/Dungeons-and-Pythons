@@ -4,6 +4,7 @@ from utils import Move
 from utils import check_for_stuff
 
 
+
 class Fight(Hero, Enemy, Move):
     def __init__(self, hero, enemy, enemy_coords, dun):
         assert isinstance(hero, Hero), 'Hero must be instance of Hero class.'
@@ -32,26 +33,6 @@ class Fight(Hero, Enemy, Move):
 
     def distance(self):
         return (self.hero_coord[0] - self.enemy_coords[0], self.hero_coord[1] - self.enemy_coords[1])
-
-    def chech_for_wall(self):
-        if (self.hero_coord[0] - self.enemy_coords[0]) == 0 and self.hero_coord[1] - self.enemy_coords[1] < 0:
-            for i in range(abs(self.hero_coord[1] - self.enemy_coords[1])):
-                if self.dungeon[self.hero_coord[0]][self.hero_coord[1] + i] == '#':
-                    return True
-        if (self.hero_coord[0] - self.enemy_coords[0]) == 0 and self.hero_coord[1] - self.enemy_coords[1] > 0:
-            for i in range(abs(self.hero_coord[1] - self.enemy_coords[1])):
-                if self.dungeon[self.hero_coord[0]][self.hero_coord[1] - i] == '#':
-                    return True
-
-        if self.hero_coord[0] - self.enemy_coords[0] > 0 and self.hero_coord[1] - self.enemy_coords[1] == 0:
-            for i in range(abs(self.hero_coord[0] - self.enemy_coords[0])):
-                if self.dungeon[self.hero_coord[0] - i][self.hero_coord[y]] == '#':
-                    return True
-        if self.hero_coord[0] - self.enemy_coords[0] < 0 and self.hero_coord[1] - self.enemy_coords[1] == 0:
-            for i in range(abs(self.hero_coord[0] - self.enemy_coords[0])):
-                if self.dungeon[self.hero_coord[0] + i][self.hero_coord[y]] == '#':
-                    return True
-        return False
 
     def move_enemy(self):
         m = Move(self.enemy)

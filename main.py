@@ -5,6 +5,7 @@ from enemy import Enemy
 from utils import check_for_stuff
 from weapon_and_spells import Spell
 from weapon_and_spells import Weapon
+from utils import chech_for_wall
 
 
 def main():
