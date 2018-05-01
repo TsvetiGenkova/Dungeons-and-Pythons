@@ -4,7 +4,6 @@ from utils import Move
 from utils import check_for_stuff
 
 
-
 class Fight(Hero, Enemy, Move):
     def __init__(self, hero, enemy, enemy_coords, dun):
         assert isinstance(hero, Hero), 'Hero must be instance of Hero class.'
@@ -139,10 +138,6 @@ class Fight(Hero, Enemy, Move):
                 print(f"Enemy hits hero for {self.enemy.damage} dmg. Hero health is {self.hero.get_health()}.")
 
     def start_fight(self):
-        if self.chech_for_wall():
-            print(
-                "There is a wall between your hero and the enemy you can\'t start a fight.")
-            return
         print(f"A fight is started between our {self.hero} and {self.enemy}")
 
         while self.hero.is_alive() != False or self.enemy.is_alive() != False:

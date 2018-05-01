@@ -9,7 +9,8 @@ class Enemy(Person):
     def __init__(self, health, mana, damage, spell=None, weapon=None):
         assert type(health) is int, 'health is not int'
         assert type(mana) is int, 'mana is not int'
-        assert type(damage) is float or type(damage) is int, 'damage is not float'
+        assert type(damage) is float or type(
+            damage) is int, 'damage is not float'
         assert damage > 0, 'damage must be positeve'
         super().__init__(health, mana, spell, weapon)
         self.damage = damage
@@ -19,7 +20,15 @@ class Enemy(Person):
 
     @classmethod
     def generate_enemy(self):
-        return Enemy(health=random.randint(80,100), mana=random.randint(50,80), damage=random.randint(20,40))
+        ran = randint(0, 100)
+        enemy = Enemy(health=random.randint(80, 100), mana=random.randint(
+            50, 80), damage=random.randint(20, 40))
+        if ran > 50:
+            enemy.equip(Weapon(name='Base Sword', damage=randint(40, 60)))
+        else:
+            enemy.learn(Spell(name='Dark Magic', damage=randint(
+                40, 60), mana_cost=randint(10, 20), cast_range=2))
+        return enemy
 
     def attack(self, by=None):
         if by == None:
@@ -41,7 +50,6 @@ class Enemy(Person):
                 damage = 0
                 print(f"The enemy currently doesn\'t have any weapons.")
         return damage
-
 
     def __str__(self):
         return f'Enemy (health = {self.health} , mana = {self.mana}))'
