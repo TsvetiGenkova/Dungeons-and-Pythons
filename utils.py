@@ -151,7 +151,7 @@ class Move():
             'Direction must be up,down, left or right'
         assert type(curr_x) is int and type(
             curr_y) is int, 'curr_x and curr_y must be integers'
-        assert curr_x > 0 and curr_y > 0, 'curr_x and curr_y must be positive'
+        assert curr_x >= 0 and curr_y >= 0, 'curr_x and curr_y must be positive'
         if isinstance(self.inst, Hero):
             abrv = "H"
             oposite_abrv = "E"

@@ -11,7 +11,7 @@ import os
 
 def get_map_names():
     list_of_maps = []
-    for i in os.listdir():
+    for i in os.listdir('Maps'):
         if i.endswith('.txt'):
             list_of_maps.append(i)
     return list_of_maps
@@ -34,12 +34,12 @@ def main():
     print(f"and his stats are: health - {h.get_health()}, mana - {h.get_mana()}, mana regeneration rate - {h.get_mana_regeneration_rate()}")
 
     map=get_map_names()
+    print(map)
     m = input(f"\n Now pick a level: ")
     while m not in get_map_names() :
         m = input(f"\n Wrong file name, pick again : ")
     map.remove(m)
-    map.remove('loot.txt')
-    give_map = f"{m}"
+    give_map = f"Maps/{m}"
     # add asserts about the map and names
     d = Dungeon(give_map)
     d.spawn(h)
@@ -92,14 +92,10 @@ def main():
                 break
         if d.cleared == True:
             print('You cleared the dungon')
-            print('asdsa')
             das = input('Go to next ? y/n  ')
-            print('asdsa')
             if das == 'y':
                 hero = d.hero
-                for i in range(10):
-                    print(map[0])
-                d = Dungeon(map[0])
+                d = Dungeon('Maps/'+map[0])
                 d.spawn(hero)
                 map.remove(map[0])
                 d.print_map()
