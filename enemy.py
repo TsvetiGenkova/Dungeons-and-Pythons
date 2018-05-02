@@ -20,10 +20,10 @@ class Enemy(Person):
 
     @classmethod
     def generate_enemy(self):
-        ran = randint(0, 100)
+        ran = randint(0, 1)
         enemy = Enemy(health=random.randint(80, 100), mana=random.randint(
             50, 80), damage=random.randint(20, 40))
-        if ran > 50:
+        if ran == 1:
             enemy.equip(Weapon(name='Base Sword', damage=randint(40, 60)))
         else:
             enemy.learn(Spell(name='Dark Magic', damage=randint(
