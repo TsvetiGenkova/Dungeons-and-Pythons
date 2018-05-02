@@ -46,7 +46,7 @@ def check_for_stuff(dungeon_map, x, y, stuff, ran):
     return tmp
 
 
-def chech_for_wall(hero_x, hero_y, enemy_x, enemy_y, dungeon_map):
+def check_for_wall(hero_x, hero_y, enemy_x, enemy_y, dungeon_map):
     assert type(hero_x) is int, 'hero_x must be int'
     assert type(hero_y) is int, ' hero_y must be int'
     assert type(enemy_x) is int, 'enemy_x must be int'

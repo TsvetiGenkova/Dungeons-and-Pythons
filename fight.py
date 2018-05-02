@@ -30,21 +30,25 @@ class Fight(Hero, Enemy, Move):
         self.hero_coord = (a, b)
         return self.hero_coord
 
-    def distance(self):
+    def distance_to_enemy(self):
         return (self.hero_coord[0] - self.enemy_coords[0], self.hero_coord[1] - self.enemy_coords[1])
+
+    def distance_to_hero(self):
+        return (self.enemy_coords[0] - self.hero_coord[0], self.enemy_coords[1] - self.hero_coord[1])
 
     def move_towards(self, who):
         m = Move(who)
-        (x_coord, y_coord) = (0, 0)
         if isinstance(who, Enemy):
-            self.enemy_coords[0] = x_coord
-            self.enemy_coords[1] = y_coord
+            x_coord = self.enemy_coords[0]
+            y_coord = self.enemy_coords[1]
+            distance = self.distance_to_enemy()
         elif isinstance(who, Hero):
-            self.hero_coord[0] = x_coord
-            self.hero_coord[1] = y_coord
+            x_coord = self.hero_coord[0]
+            y_coord = self.hero_coord[1]
+            distance = self.distance_to_hero()
         
-        if self.distance()[0] == 0:
-            if self.distance()[1] < 0:
+        if distance[0] == 0:
+            if distance[1] < 0:
                 tmp = m.move(self.dungeon, x_coord, y_coord, "left")
                 x_coord = tmp[0]
                 y_coord = tmp[1]
@@ -56,8 +60,8 @@ class Fight(Hero, Enemy, Move):
                 y_coord = tmp[1]
                 self.dungeon = tmp[2]
                 print(f"The enemy has moved one square to the right in order to get to the hero. This is his move.")
-        elif self.distance()[1] == 0:
-            if self.distance()[0] < 0:
+        elif distance[1] == 0:
+            if distance[0] < 0:
                 tmp = m.move(self.dungeon, x_coord, y_coord, "up")
                 x_coord = tmp[0]
                 y_coord = tmp[1]
@@ -70,6 +74,12 @@ class Fight(Hero, Enemy, Move):
                 self.dungeon = tmp[2]
                 print(f"The enemy has moved one square down in order to get to the hero. This is his move.")
 
+        if isinstance(who, Enemy):
+            self.enemy_coords = (tmp[0], tmp[1])
+        elif isinstance(who, Hero):
+            self.hero_coord = (tmp[0], tmp[1])
+
+        self.print_dungeon()
         return self.dungeon
 
     def hero_fight(self):
@@ -78,9 +88,7 @@ class Fight(Hero, Enemy, Move):
                 self.enemy.take_damage(self.hero.attack(by="spell"))
                 print(f"Hero casts \"{self.hero.spell.name}\" for {self.hero.spell.damage} damage. Enemy health is: {self.enemy.get_health()}")
             elif not self.hero.can_cast():
-                print("HERO")
                 self.move_towards(self.hero)
-
 
         elif check_for_stuff(self.dungeon, self.hero_coord[0], self.hero_coord[1], "E", 1):
             if self.hero.can_cast() and self.hero.weapon != None:

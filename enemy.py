@@ -1,5 +1,6 @@
 import random
 from Person import Person
+from random import randint
 from weapon_and_spells import Weapon
 from weapon_and_spells import Spell
 

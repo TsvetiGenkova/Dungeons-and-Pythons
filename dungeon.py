@@ -7,6 +7,7 @@ from weapon_and_spells import Spell
 from weapon_and_spells import Weapon
 from utils import Move
 from utils import check_for_stuff
+from utils import check_for_wall
 
 class Dungeon(Move):
 
@@ -81,9 +82,9 @@ class Dungeon(Move):
         if by == "spell":
             if self.hero.can_cast():
                 ran = self.hero.spell.get_cast_range()
-                 enemy_cords = check_for_stuff(
+                enemy_cords = check_for_stuff(
                     self.dungeon_map, self.x, self.y, "E", ran)
-                if enemy_cords != False and chech_for_wall(self.x, self.y, enemy_cords[0], enemy_cords[1], self.dungeon_map) == False:
+                if enemy_cords != False and check_for_wall(self.x, self.y, enemy_cords[0], enemy_cords[1], self.dungeon_map) == False:
                     return True
                 else:
                     return False
