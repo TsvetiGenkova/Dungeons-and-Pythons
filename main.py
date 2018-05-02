@@ -24,7 +24,7 @@ def main():
     d = Dungeon(map)
     d.spawn(h)
     w = Weapon(name="The Axe of Destiny", damage=20)
-    s = Spell(name="Fireball", damage=40, mana_cost=10, cast_range=3)
+    s = Spell(name="Fireball", damage=40, mana_cost=90, cast_range=3)
     h.equip(w)
     h.learn(s)
     d.print_map()

@@ -19,7 +19,15 @@ class Enemy(Person):
 
     @classmethod
     def generate_enemy(self):
-        return Enemy(health=random.randint(80,100), mana=random.randint(50,80), damage=random.randint(20,40))
+        ran = randint(0, 1)
+        enemy = Enemy(health=random.randint(80, 100), mana=random.randint(
+            50, 80), damage=random.randint(20, 40))
+        if ran == 1:
+            enemy.equip(Weapon(name='Base Sword', damage=randint(40, 60)))
+        else:
+            enemy.learn(Spell(name='Dark Magic', damage=randint(
+                40, 60), mana_cost=randint(10, 20), cast_range=2))
+        return enemy
 
     def attack(self, by=None):
         if by == None:
