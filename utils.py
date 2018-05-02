@@ -15,7 +15,7 @@ def check_for_stuff(dungeon_map, x, y, stuff, ran):
     assert type(stuff) is str, 'Stuff must be string'
     assert stuff == 'H' or stuff == 'E', 'Stuff must be H or E'
     assert type(dungeon_map) is list, 'dungeon_map must be list'
-    for i in range(1, ran + 1):
+    for i in range(0, ran + 1):
         try:
             dungeon_map[x + i][y]
             if dungeon_map[x + i][y] == stuff:

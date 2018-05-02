@@ -48,7 +48,6 @@ def main():
     h.equip(w)
     h.learn(s)
     d.print_map()
-# d.cleared
     while True:
         if d.hero_attack(by="spell"):
             des = input(
@@ -102,7 +101,6 @@ def main():
             else:
                 print('Game finished')
                 break
-        print(d.cleared)
 
 
 
