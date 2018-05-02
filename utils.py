@@ -1,3 +1,4 @@
+import sys
 from Person import Person
 from hero import Hero
 from enemy import Enemy
@@ -46,7 +47,8 @@ def check_for_stuff(dungeon_map, x, y, stuff, ran):
     return tmp
 
 
-def chech_for_wall(hero_x, hero_y, enemy_x, enemy_y, dungeon_map):
+def check_for_wall(hero_x, hero_y, enemy_x, enemy_y, dungeon_map):
+
     assert type(hero_x) is int, 'hero_x must be int'
     assert type(hero_y) is int, ' hero_y must be int'
     assert type(enemy_x) is int, 'enemy_x must be int'
@@ -88,27 +90,28 @@ class Move():
         if treasure[0] == "weapon":
             tmp = float(treasure[2]) if '.' in treasure[2] else int(
                 treasure[2])
-            tr = Weapon(name=treasure[1], damage=tmp)
-            self.inst.equip(tr)
+            tmp_w = Weapon(name=treasure[1], damage=tmp)
+            self.inst.equip(tmp_w)
+            tr = f"the weapon \"{tmp_w.name}\" with {tmp_w.get_damage()} dmg"
         elif treasure[0] == "spell":
             tmp = float(treasure[2]) if '.' in treasure[2] else int(
                 treasure[2])
             tmp1 = float(treasure[3]) if '.' in treasure[3] else int(
                 treasure[3])
-            tr = Spell(name=treasure[1], damage=tmp,
+            tmp_s = Spell(name=treasure[1], damage=tmp,
                        mana_cost=tmp1, cast_range=int(treasure[4]))
-            self.inst.learn(tr)
+            self.inst.learn(tmp_s)
+            tr = f"the spell \"{tmp_s.name}\" with {tmp_s.get_damage()} dmg, {tmp_s.get_mana_cost()} mana cost and range {tmp_s.get_cast_range()}"
         else:
             if isinstance(self.inst, Hero):
                 if treasure[0] == "Mana potion":
                     self.inst.take_mana(int(treasure[1]))
-                    tr = f"Mana potion = {int(treasure[1])} mana"
+                    tr = f"Mana potion with {int(treasure[1])} mana"
                 elif treasure[0] == "Health potion":
                     self.inst.take_healing(int(treasure[1]))
-                    tr = f"Health potion {int(treasure[1])} health"
+                    tr = f"Health potion with {int(treasure[1])} health"
             elif isinstance(self.inst, Enemy):
-                print("The enemy can heal themself.")
-                tr = 0
+                print("The enemy can\'t heal themself.")
 
         return tr
 
@@ -132,8 +135,10 @@ class Move():
         elif dungeon_map[curr_x + x][curr_y + y] == "G":
             print("You have cleared the dungeon!")
             self.cleared = True
+            sys.exit(0)
         elif dungeon_map[curr_x + x][curr_y + y] == "T":
             print(f"Found {self.pick_treasure()}!")
+<<<<<<< HEAD
         elif dungeon_map[curr_x + x][curr_y + y] == "E":
             des = input(
                 "There is an enemy in the direction you wish to go. Do you want to start a fight. (y/n) ")
@@ -145,6 +150,8 @@ class Move():
                 f.start_fight()
             elif des == "n":
                 pass
+=======
+>>>>>>> c3fd602f0c69908be3a451d4cc17cb8c230ef2ae
         dungeon_map[curr_x][curr_y] = '.'
         dungeon_map[curr_x + x][curr_y + y] = abrv
         curr_y += y
