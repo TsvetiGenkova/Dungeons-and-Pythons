@@ -59,7 +59,7 @@ class Dungeon(Move):
         m = Move(self.hero)
         tmp = m.move(self.dungeon_map, self.x, self.y, direction)
         if m.cleared:
-            self.cleared == True
+            self.cleared = True
             return
         if tmp:
             self.x = tmp[0]

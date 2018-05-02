@@ -135,23 +135,8 @@ class Move():
         elif dungeon_map[curr_x + x][curr_y + y] == "G":
             print("You have cleared the dungeon!")
             self.cleared = True
-            sys.exit(0)
         elif dungeon_map[curr_x + x][curr_y + y] == "T":
             print(f"Found {self.pick_treasure()}!")
-<<<<<<< HEAD
-        elif dungeon_map[curr_x + x][curr_y + y] == "E":
-            des = input(
-                "There is an enemy in the direction you wish to go. Do you want to start a fight. (y/n) ")
-            if des == "y":
-                enemy = Enemy.generate_enemy()
-                enemy_coords = check_for_stuff(
-                    self.dungeon_map, curr_x, curr_y, "E", 1)
-                f = Fight(self.hero, enemy, enemy_coords, self.dungeon_map)
-                f.start_fight()
-            elif des == "n":
-                pass
-=======
->>>>>>> c3fd602f0c69908be3a451d4cc17cb8c230ef2ae
         dungeon_map[curr_x][curr_y] = '.'
         dungeon_map[curr_x + x][curr_y + y] = abrv
         curr_y += y

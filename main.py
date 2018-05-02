@@ -6,6 +6,21 @@ from utils import check_for_stuff
 from weapon_and_spells import Spell
 from weapon_and_spells import Weapon
 
+import os
+
+
+def get_map_names():
+    list_of_maps = []
+    for i in os.listdir():
+        if i.endswith('.txt'):
+            list_of_maps.append(i)
+    return list_of_maps
+
+
+
+def map_exists(map_name):
+    return os.path.exists(map_name)
+
 
 def main():
     print("Welcome to Dungeon and pythons!")
@@ -17,19 +32,24 @@ def main():
     h = Hero(name=n, title=t)
     print(f"Very well your hero is known as {str(h.known_as())}")
     print(f"and his stats are: health - {h.get_health()}, mana - {h.get_mana()}, mana regeneration rate - {h.get_mana_regeneration_rate()}")
-    #print("You can equip your hero with weapon or spell before the start or find them in the dungeon")
+
+    map=get_map_names()
     m = input(f"\n Now pick a level: ")
-    map = f"{m}.txt"
+    while m not in get_map_names() :
+        m = input(f"\n Wrong file name, pick again : ")
+    map.remove(m)
+    map.remove('loot.txt')
+    give_map = f"{m}"
     # add asserts about the map and names
-    d = Dungeon(map)
+    d = Dungeon(give_map)
     d.spawn(h)
     w = Weapon(name="The Axe of Destiny", damage=20)
     s = Spell(name="Fireball", damage=40, mana_cost=80, cast_range=3)
     h.equip(w)
     h.learn(s)
     d.print_map()
-
-    while d.cleared == False:
+# d.cleared
+    while True:
         if d.hero_attack(by="spell"):
             des = input(
                 "There is an enemy in the range of your spell. You can start a fight. (y/n) ")
@@ -70,6 +90,26 @@ def main():
                     break
             elif inp == "n":
                 break
+        if d.cleared == True:
+            print('You cleared the dungon')
+            print('asdsa')
+            das = input('Go to next ? y/n  ')
+            print('asdsa')
+            if das == 'y':
+                hero = d.hero
+                for i in range(10):
+                    print(map[0])
+                d = Dungeon(map[0])
+                d.spawn(hero)
+                map.remove(map[0])
+                d.print_map()
+            else:
+                print('Game finished')
+                break
+        print(d.cleared)
+
+
+
 
 
 if __name__ == '__main__':
