@@ -79,6 +79,8 @@ class Dungeon(Move):
             self.move_hero(dir)
 
     def hero_attack(self, by):
+        if self.hero.is_alive() is False:
+            return False
         if by == "spell":
             if self.hero.can_cast():
                 ran = self.hero.spell.get_cast_range()
