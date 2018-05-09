@@ -7,6 +7,7 @@ from weapon_and_spells import Spell
 from weapon_and_spells import Weapon
 from utils import Move
 from utils import check_for_stuff
+from utils import check_for_wall
 
 
 class Dungeon(Move):
@@ -58,7 +59,8 @@ class Dungeon(Move):
         m = Move(self.hero)
         tmp = m.move(self.dungeon_map, self.x, self.y, direction)
         if m.cleared:
-            self.cleared == True
+            self.cleared = True
+            return
         if tmp:
             self.x = tmp[0]
             self.y = tmp[1]
@@ -71,16 +73,20 @@ class Dungeon(Move):
                     self.hero.mana = self.hero.max_mana
                     self.spawn(self.hero)
                     self.print_map()
-                else:
-                    pass
+                elif des == "n":
+                    return
             dir = input("You can\'t move that way! Pick another direction! ")
             self.move_hero(dir)
 
     def hero_attack(self, by):
+        if self.hero.is_alive() is False:
+            return False
         if by == "spell":
             if self.hero.can_cast():
                 ran = self.hero.spell.get_cast_range()
-                if check_for_stuff(self.dungeon_map, self.x, self.y, "E", ran):
+                enemy_cords = check_for_stuff(
+                    self.dungeon_map, self.x, self.y, "E", ran)
+                if enemy_cords != False and check_for_wall(self.x, self.y, enemy_cords[0], enemy_cords[1], self.dungeon_map) == False:
                     return True
                 else:
                     return False
@@ -94,5 +100,4 @@ class Dungeon(Move):
                 else:
                     return False
             else:
-                print(f"You can\'t attack, because you don\'t have a weapon.")
                 return False
