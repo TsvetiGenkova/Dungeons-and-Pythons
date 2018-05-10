@@ -40,7 +40,7 @@ class Person():
 
     def take_damage(self, damage):
         assert type(damage) is float or type(damage) is int, 'damage must be number'
-        assert damage > 0, 'damege must positive'
+        assert damage > 0, 'damage must positive'
         self.health -= damage
 
     def take_mana(self, mana_points):

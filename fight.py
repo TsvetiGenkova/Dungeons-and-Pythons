@@ -4,7 +4,7 @@ from utils import Move
 from utils import check_for_stuff
 
 
-class Fight(Hero, Enemy, Move):
+class Fight(Hero, Enemy):
     def __init__(self, hero, enemy, enemy_coords, dun):
         assert isinstance(hero, Hero), 'Hero must be instance of Hero class.'
         assert isinstance(
@@ -152,6 +152,3 @@ class Fight(Hero, Enemy, Move):
                 print("Your hero is dead!")
                 break
             self.hero.take_mana(self.hero.mana_regeneration_rate)
-        
-        
-

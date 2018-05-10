@@ -9,6 +9,7 @@ from utils import Move
 from utils import check_for_stuff
 from utils import check_for_wall
 
+
 class Dungeon(Move):
 
     def __init__(self, map_file):
@@ -58,7 +59,7 @@ class Dungeon(Move):
         m = Move(self.hero)
         tmp = m.move(self.dungeon_map, self.x, self.y, direction)
         if m.cleared:
-            self.cleared == True
+            self.cleared = True
             return
         if tmp:
             self.x = tmp[0]
@@ -66,7 +67,7 @@ class Dungeon(Move):
             self.print_map()
         else:
             if not self.hero.is_alive():
-                des  = input("Do you want to respawn? (y/n) ")
+                des = input("Do you want to respawn? (y/n) ")
                 if des == "y":
                     self.hero.health = self.hero.max_health
                     self.hero.mana = self.hero.max_mana
@@ -77,8 +78,9 @@ class Dungeon(Move):
             dir = input("You can\'t move that way! Pick another direction! ")
             self.move_hero(dir)
 
-
     def hero_attack(self, by):
+        if self.hero.is_alive() is False:
+            return False
         if by == "spell":
             if self.hero.can_cast():
                 ran = self.hero.spell.get_cast_range()
