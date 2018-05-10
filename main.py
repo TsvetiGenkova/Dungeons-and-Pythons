@@ -6,8 +6,7 @@ from utils import check_for_stuff
 from weapon_and_spells import Spell
 from weapon_and_spells import Weapon
 
-
-def main():
+def start_screen()
     print("Welcome to Dungeon and pythons!")
     print("The goal of the game is to find the treasures hidden in the dungeon and reach the gateway \'G\'.")
     print("But beware the fierce enemys that you can meet in the dark...\n\n")
@@ -17,10 +16,10 @@ def main():
     h = Hero(name=n, title=t)
     print(f"Very well your hero is known as {str(h.known_as())}")
     print(f"and his stats are: health - {h.get_health()}, mana - {h.get_mana()}, mana regeneration rate - {h.get_mana_regeneration_rate()}")
-    #print("You can equip your hero with weapon or spell before the start or find them in the dungeon")
-    m = input(f"\n Now pick a level: ")
+    #print("Do you want to equip your hero with weapon or spell before the start or find them in the dungeon? (y/n)")
+    m = input(f"Now pick a level: ")
+    print("Your hero is \'H\' and where you see \'E\' there is an enemy. If you reach \'T\' treasure awaits you.")
     map = f"{m}.txt"
-    #add asserts about the map and names
     d = Dungeon(map)
     d.spawn(h)
     w = Weapon(name="The Axe of Destiny", damage=20)
@@ -28,6 +27,10 @@ def main():
     h.equip(w)
     h.learn(s)
     d.print_map()
+
+
+def main():
+    start_screen()
 
     while d.cleared == False:
         if d.hero_attack(by="spell"):

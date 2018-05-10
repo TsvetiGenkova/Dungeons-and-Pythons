@@ -90,7 +90,6 @@ class Dungeon(Move):
                     return False
             else:
                 return False
-                print(f"You can\'t attack, because you don\'t know any spells or don\'t have mana.")
         if by == "weapon":
             if self.hero.weapon != None:
                 if check_for_stuff(self.dungeon_map, self.x, self.y, "E", 1):

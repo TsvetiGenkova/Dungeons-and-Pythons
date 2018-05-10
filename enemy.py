@@ -34,7 +34,6 @@ class Enemy(Person):
         if by == None:
             damage = self.damage
         assert type(by) is str, 'by is not string'
-
         assert by == 'weapon' or by == 'spell', 'by= is not spell or weapon'
         if by == "spell" and isinstance(self.spell, Spell):
             if self.can_cast():

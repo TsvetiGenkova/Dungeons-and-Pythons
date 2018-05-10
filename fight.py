@@ -52,32 +52,30 @@ class Fight(Hero, Enemy, Move):
                 tmp = m.move(self.dungeon, x_coord, y_coord, "left")
                 x_coord = tmp[0]
                 y_coord = tmp[1]
-                self.dungeon = tmp[2]
-                print(f"The enemy has moved one square to the left in order to get to the hero. This is his move.")
+                self.dungeon = tmp[2]               
             else:
                 tmp = m.move(self.dungeon, x_coord, y_coord, "right")
                 x_coord = tmp[0]
                 y_coord = tmp[1]
                 self.dungeon = tmp[2]
-                print(f"The enemy has moved one square to the right in order to get to the hero. This is his move.")
         elif distance[1] == 0:
             if distance[0] < 0:
                 tmp = m.move(self.dungeon, x_coord, y_coord, "up")
                 x_coord = tmp[0]
                 y_coord = tmp[1]
                 self.dungeon = tmp[2]
-                print(f"The enemy has moved one square up in order to get to the hero. This is his move.")
             else:
                 tmp = m.move(self.dungeon, x_coord, y_coord, "down")
                 x_coord = tmp[0]
                 y_coord = tmp[1]
                 self.dungeon = tmp[2]
-                print(f"The enemy has moved one square down in order to get to the hero. This is his move.")
 
         if isinstance(who, Enemy):
             self.enemy_coords = (tmp[0], tmp[1])
+            print(f"The enemy has moved one square in order to get to the hero. This is his move.")
         elif isinstance(who, Hero):
             self.hero_coord = (tmp[0], tmp[1])
+            print(f"The hero has moved one square in order to get to the enemy. This is his move.")
 
         self.print_dungeon()
         return self.dungeon
