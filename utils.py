@@ -115,12 +115,12 @@ class Move():
 
         return tr
 
-    def is_safe(self, oposite_abrv, dungeon_map, x, y):
+    def is_safe(self, dungeon_map, x, y):
         assert type(x) is int, 'x must be int'
         assert type(y) is int, 'y must be int'
         try:
             dungeon_map[x][y]
-            if dungeon_map[x][y] == '#' or dungeon_map[x][y] == oposite_abrv:
+            if dungeon_map[x][y] == '#':
                 return False
             return True
         except IndexError:
@@ -137,6 +137,12 @@ class Move():
             self.cleared = True
         elif dungeon_map[curr_x + x][curr_y + y] == "T":
             print(f"Found {self.pick_treasure()}!")
+        if isinstance(self.inst, Hero) and dungeon_map[curr_x + x][curr_y + y] == "E":
+            pass
+            #enemy = Enemy.generate_enemy()
+            #enemy_coords = (curr_x + x, curr_y + y)
+            #f = Fight(self.inst, enemy, enemy_coords, dungeon_map)
+            #f.start_fight()
         dungeon_map[curr_x][curr_y] = '.'
         dungeon_map[curr_x + x][curr_y + y] = abrv
         curr_y += y
@@ -154,21 +160,19 @@ class Move():
         assert curr_x >= 0 and curr_y >= 0, 'curr_x and curr_y must be positive'
         if isinstance(self.inst, Hero):
             abrv = "H"
-            oposite_abrv = "E"
         elif isinstance(self.inst, Enemy):
             abrv = "E"
-            oposite_abrv = "H"
 
-        if direction == 'up' and self.is_safe(oposite_abrv, dungeon_map, curr_x - 1, curr_y):
+        if direction == 'up' and self.is_safe(dungeon_map, curr_x - 1, curr_y):
             return self.move_util(abrv, dungeon_map, curr_x, curr_y, -1, 0)
 
-        elif direction == 'down' and self.is_safe(oposite_abrv, dungeon_map, curr_x + 1, curr_y):
+        elif direction == 'down' and self.is_safe(dungeon_map, curr_x + 1, curr_y):
             return self.move_util(abrv, dungeon_map, curr_x, curr_y, 1, 0)
 
-        elif direction == 'left' and self.is_safe(oposite_abrv, dungeon_map, curr_x, curr_y - 1):
+        elif direction == 'left' and self.is_safe(dungeon_map, curr_x, curr_y - 1):
             return self.move_util(abrv, dungeon_map, curr_x, curr_y, 0, -1)
 
-        elif direction == 'right' and self.is_safe(oposite_abrv, dungeon_map, curr_x, curr_y + 1):
+        elif direction == 'right' and self.is_safe(dungeon_map, curr_x, curr_y + 1):
             return self.move_util(abrv, dungeon_map, curr_x, curr_y, 0, 1)
 
         return False
